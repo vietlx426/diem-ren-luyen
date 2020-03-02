@@ -1,0 +1,48 @@
+.text-center-middle
+{
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+.text-justify-middle
+{
+  text-align: justify;
+  vertical-align: middle !important;
+}
+
+/* --------- Profile --------- */
+.lblbold{
+	color: #FF6400;
+	font-weight: bold;
+	/*text-decoration-line: underline;
+  	text-decoration-style: double;
+  	text-decoration-color: #B34600;*/
+}
+.none-border {
+	border: none;
+	/*border-radius: 0;
+  	box-shadow: none;
+  	-webkit-box-shadow: none;*/
+}
+.lbl-header{
+	color: #FF6400;
+	font-size: 13pt;
+	font-weight: bold;
+	border-bottom: solid;
+	border-color: #FF6400;
+}
+.hr-orange{
+	border-bottom: solid;
+	border-color: #FF6400;
+	border-width: 1px;
+}
+.process-step .btn:focus{outline:none}
+.process{display:table;width:100%;position:relative}
+.process-row{display:table-row}
+.process-step button[disabled]{opacity:1 !important;filter: alpha(opacity=100) !important}
+.process-row:before{top:40px;bottom:0;position:absolute;content:" ";width:100%;height:1px;background-color:#ccc;z-order:0}
+.process-step{display:table-cell;text-align:center;position:relative}
+.process-step p{margin-top:4px}
+.btn-circle{width:80px;height:80px;text-align:center;font-size:12px;border-radius:50%}
+}
+/* --------- End Profile --------- */

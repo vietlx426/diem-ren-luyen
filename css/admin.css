@@ -1,0 +1,168 @@
+/* css fancybox */
+.green{
+  background-color:#6fb936;
+}
+.thumb{
+    margin-bottom: 30px;
+}
+
+.page-top{
+    margin-top:85px;
+}
+
+
+img.zoom {
+    width: 100%;
+    height: 200px;
+    border-radius:5px;
+    object-fit:cover;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+}
+        
+ 
+.transition {
+    -webkit-transform: scale(1.2); 
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+}
+.modal-header {
+
+ border-bottom: none;
+}
+.modal-title {
+    color:#000;
+}
+.modal-footer{
+  display:none;  
+}
+/* end css fancybox */
+
+.none-margin{
+  /*margin-top: 0px;*/
+}
+
+.content{
+  background-color: #fff;
+}
+
+.title-menu{
+  background-color: #c3c3c3;
+  color: #0056B3;
+  font-weight: bold;
+}
+
+/* ----- Vertical Menu ----- */
+.card-body-menu{
+  padding: 0px 0px 0px 0px;
+}
+
+
+/* highlight active menu */
+/*#sidebar .list-group-item:not(.collapsed) {
+    background-color: #222;
+}*/
+
+
+#sidebar .list-group-item:hover{
+  background-color: #c3c3c3;
+  font-weight: bold;
+}
+
+
+/*.list-group-item[aria-expanded="false"]::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+
+.list-group-item[aria-expanded="true"]::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+*/
+
+/* closed state */
+#sidebar .list-group-item[aria-expanded="false"]::after {
+  content: " \f0d7";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+
+/* open state */
+#sidebar  .list-group-item[aria-expanded="true"] {
+  background-color: #dbdbdb;
+}
+#sidebar .list-group-item[aria-expanded="true"]::after {
+  content: " \f0da";
+  font-family: FontAwesome;
+  display: inline;
+  text-align: right;
+  padding-left: 5px;
+}
+
+/* level 1*/
+#sidebar  .collapse .list-group-item  {
+  padding-left: 30px;
+}
+
+/* level 2*/
+#sidebar .collapse > .collapse .list-group-item {
+  padding-left: 50px;
+}
+
+/* level 3*/
+#sidebar .collapse > .collapse > .collapse .list-group-item {
+  padding-left: 70px;
+}
+
+@media (max-width:48em) {
+    /* overlay sub levels on small screens */
+    #sidebar .list-group .collapse.in, #sidebar .list-group .collapsing {
+        position: absolute;
+        z-index: 1;
+        width: 50px;
+    }
+    #sidebar .list-group > .list-group-item {
+        text-align: center;
+        /*  padding: .75rem .5rem;*/
+    }
+    /* hide caret icons of top level when collapsed */
+    #sidebar .list-group > .list-group-item[aria-expanded="true"]::after,
+    #sidebar .list-group > .list-group-item[aria-expanded="false"]::after {
+        /*display:none;*/
+    }
+}
+
+/* change transition animation to width when entire sidebar is toggled */
+#sidebar.collapse {
+  -webkit-transition-timing-function: ease;
+       -o-transition-timing-function: ease;
+          transition-timing-function: ease;
+  -webkit-transition-duration: .2s;
+       -o-transition-duration: .2s;
+          transition-duration: .2s;
+}
+
+#sidebar.collapsing {
+  opacity: 0.8;
+  width: 0;
+  -webkit-transition-timing-function: ease-in;
+       -o-transition-timing-function: ease-in;
+          transition-timing-function: ease-in;
+  -webkit-transition-property: width;
+       -o-transition-property: width;
+          transition-property: width;
+
+}
+/* ----- End Vertical Menu ----- */

@@ -1,0 +1,32 @@
+.text-justify-middle
+{
+  text-align: justify;
+  vertical-align: middle !important;
+
+}
+
+.text-left-middle
+{
+  vertical-align: middle !important;
+}
+
+.text-center-middle
+{
+  text-align: center;
+  vertical-align: middle !important;
+
+}
+
+.text-right-middle
+{
+  text-align: right;
+  vertical-align: middle !important;
+}
+.a-small-box{
+	margin: 0 0 0 0;
+}
+
+.inner h4{
+    font-size: 30px;
+    font-weight: bold;
+}
