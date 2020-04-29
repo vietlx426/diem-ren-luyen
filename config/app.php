@@ -179,7 +179,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        'Chumper\Zipper\ZipperServiceProvider',
         // 'Maatwebsite\Excel\ExcelServiceProvider'
     ],
 
@@ -231,7 +230,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Zipper' => 'Chumper\Zipper\Zipper',
     ],
 
 ];

@@ -27,6 +27,10 @@ class RequestScholarship extends FormRequest
             'mahb'=>'required|unique:hocbong,mahb,'.$this->id,
             'tenhb'=>'required',
             'tendvtt'=>'required',
+            'soluong'=>'required',
+            'idhockynamhoc'=>'required',
+            'gthb'=>'required',
+            
         ];
     }
     public function messages(){
@@ -35,7 +39,9 @@ class RequestScholarship extends FormRequest
             'mahb.unique'=>'Mã học bổng đã tồn tại',
             'tenhb.required'=>'Vui lòng tên học bổng',
             'tendvtt.required'=>'Vui lòng điền đơn vị tài trợ',
-            
+            'soluong.required'=>'Vui lòng nhập số lượng',
+            'idhockynamhoc.required'=>'Vui lòng nhập số lượng',
+
             
         ];
     }

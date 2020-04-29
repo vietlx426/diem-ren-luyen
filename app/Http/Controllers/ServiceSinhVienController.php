@@ -175,7 +175,7 @@ class ServiceSinhVienController extends Controller
 			$sinhVien->email_agu = $SinhVien['email'];
 			$sinhVien->cmnd = $SinhVien['cmnd'];
 			$lop = ServiceLopController::GetClassByClassName($SinhVien['lop']);
-			$sinhVien->lop_id = $lop?$lop->id:"";
+			$sinhVien->lop_id = $lop?$lop->id:""; 
 			$sinhVien->diemtrungtuyen = $SinhVien['diem_trung_tuyen'];
 
 			$sinhVien->save();

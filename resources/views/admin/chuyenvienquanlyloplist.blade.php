@@ -56,7 +56,7 @@
                     <tr>
                       @if($countRow == 1)
                         <th rowspan="{{$totalLop}}" class="text-center">{{++$STT}}</th>
-                        <td rowspan="{{$totalLop}}"> {{ $chuyenVienQuanLyLop->cbgv->macanbogiangvien }} </td>
+                        <td rowspan="{{$totalLop}}"> {{ $chuyenVienQuanLyLop->cbgv_id }} </td>
                         <td rowspan="{{$totalLop}}"> {{ $chuyenVienQuanLyLop->cbgv->hochulot . ' ' . $chuyenVienQuanLyLop->cbgv->ten}} </td>
                         <td rowspan="{{$totalLop}}"> {{ $chuyenVienQuanLyLop->cbgv->dienthoaicanhan }} </td>
                         <td rowspan="{{$totalLop}}"> {{ $chuyenVienQuanLyLop->cbgv->email }} </td>

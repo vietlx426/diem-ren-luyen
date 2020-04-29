@@ -60,14 +60,18 @@
                     <li><a href="{{route('adminstudentsearch_hinhthe')}}">TÌM KIẾM-CẬP NHẬT</a></li>
                 </ul>
             </li>
+            
             <li>
-                <a><i class="fa fa-credit-card"></i>QUẢN LÝ HỌC BỔNG<span class="fa fa-chevron-down"></span></a>
+                <a><i class="fa fa-credit-card"></i>HỌC BỔNG<span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li><a href="{{route('admin.create.scholar.form')}}">Thêm học bổng</a></li>
-                    <li><a href="{{route('admin.get.list.scholar')}}">TÌM KIẾM-CẬP NHẬT học bổng</a></li>
-                    <li><a href="{{route('admin.search.student')}}">Trao học bổng</a></li>
+                    <li><a href="{{route('hocbong.dashboard')}}">Dashboard học bổng</a></li>
+                    <li><a href="{{route('hocbong.thongbao')}}">Thông báo</a></li>
+                    <li><a href="{{route('hocbong.index')}}">TÌM KIẾM - THỐNG KÊ</a></li>
+                    <li><a href="{{route('hocbong.timkiem.sinhvien')}}">Trao học bổng</a></li>
+                    
                 </ul>
             </li>
+
             <li><a href="{{route('admin_import_template')}}"><i class="fa fa-download"></i> MẪU IMPORT</a></li>
         </div>
     </div>

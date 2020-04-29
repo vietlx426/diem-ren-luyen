@@ -168,7 +168,7 @@ class ChuyenVienQuanLyLopController extends Controller
                 self::RemoveClassCurrent($request->cbgv, $request->lop);
 
                 /* 2. Lưu mới */    
-                self::store($request);
+               
 
                 return redirect()->route('admin_expers')->with('success', "Lưu thành công!");
             } catch (Exception $e) {

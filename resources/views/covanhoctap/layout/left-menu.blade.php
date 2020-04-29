@@ -9,6 +9,7 @@
             <li> <a href="{{route('covanhoctap_index_tieuchi_minhchung')}}"><i class="fa fa-list-alt"></i>TIÊU CHÍ-MINH CHỨNG</a> </li>
             <li> <a href="{{route('covanhoctap_hoatdongsukien')}}"><i class="fa fa-futbol-o"></i>HOẠT ĐỘNG - SỰ KIỆN</a> </li>
             <li> <a href="{{route('covanhoctap_sinhvien')}}"><i class="fa fa-graduation-cap"></i>DANH SÁCH SINH VIÊN</a> </li>
+            <li> <a href="{{route('covanhoctap.hocbong')}}"><i class="fa fa-graduation-cap"></i>DANH SÁCH SINH VIÊN NHẬN HỌC BỔNG</a> </li>
         </div>
     </div>
     <!-- /sidebar menu -->

@@ -36,7 +36,7 @@ class UserController extends Controller
         $User = User::find($iduser);
         $DS_Group = Group::all();
         return view('admin.user_group_edit', ['User' => $User, 'DS_Group' => $DS_Group]);
-    }
+    } 
 
     public function showKhoa($idKhoa)
     {

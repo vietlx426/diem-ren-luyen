@@ -11,4 +11,12 @@ class LichSuHocBong extends Model
     {
         return $this->belongsTo('App\Scholarship', 'id_hocbong');
     }
+    public function infosv()
+    {
+    	return $this->belongsTo('App\SinhVien', 'id_sinhvien');
+    }
+    public function infoHB()
+    {
+    	return $this->belongsTo('App\HocBong', 'id_hocbong');
+    }
 }

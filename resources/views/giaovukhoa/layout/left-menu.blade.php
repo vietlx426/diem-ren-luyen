@@ -9,6 +9,7 @@
             <li> <a href="{{route('giaovukhoa_index_tieuchi_minhchung')}}"><i class="fa fa-list-alt"></i>TIÊU CHÍ-MINH CHỨNG</a> </li>
             <li> <a href="{{route('giaovukhoa_hoatdongsukien')}}"><i class="fa fa-futbol-o"></i>HOẠT ĐỘNG - SỰ KIỆN</a> </li>
             <li> <a href="{{route('giaovukhoa_lop')}}"><i class="fa fa-graduation-cap"></i>SINH VIÊN - LỚP</a> </li>
+            <li> <a href="{{route('giaovukhoa.hocbong')}}"><i class="fa fa-graduation-cap"></i>HỌC BỔNG</a> </li>
         </div>
     </div>
     <!-- /sidebar menu -->

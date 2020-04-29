@@ -45,10 +45,11 @@ class SinhVien extends Model
     public function HocKyNamHoc(){
         return $this->belongsTo(HocKyNamHoc::class,'hockynamhoc_id');
     }
-    public function HocBong()
+    public function hocbong()
     {
-        return $this->belongsTo('App\Scholarship', 'id_hocbong');
+        return $this->hasMany('App\LichSuHocBong', 'id');
     }
+
     
 
 }

@@ -142,39 +142,50 @@ Route::middleware('auth')->group(function(){
 	 * --------- Admin, Danh mục ---------
 	 */
 	Route::middleware('quantrihethong')->prefix('admin')->group(function(){
-
+//----------------------------TTCK--------------------------------------
 		//Học bổng
-		Route::group(['prefix'=>'scholar'],function(){
-        Route::get('/','AdminScholarController@index')->name('admin.get.list.scholar');
-        Route::get('/create','AdminScholarController@create')->name('admin.create.scholar.form');
-        Route::post('/create','AdminScholarController@store');
-        Route::get('/update/{id}','AdminScholarController@edit')->name('admin.get.edit.scholar');
-        Route::post('/update/{id}','AdminScholarController@update');
-        Route::get('/{action}/{id}','AdminScholarController@action')->name('admin.action.list.scholar');
+		// Route::group(['prefix'=>'scholar'],function(){
+  //       Route::get('/','AdminScholarController@index')->name('admin.get.list.scholar');
+  //       Route::get('/create','AdminScholarController@create')->name('admin.create.scholar.form');
+  //       Route::post('/create','AdminScholarController@store');
+  //       Route::get('/update/{id}','AdminScholarController@edit')->name('admin.get.edit.scholar');
+  //       Route::post('/update/{id}','AdminScholarController@update');
+  //       Route::get('/{action}/{id}','AdminScholarController@action')->name('admin.action.list.scholar');
 
-        //
 
-        //Học bổng (Tìm sinh viên)
-        Route::get('/tim-kiem','AdminScholarSearchController@StudentSearch')->name('admin.search.student');
-        Route::get('/tim-kiem/getbomon/{id}','AdminScholarSearchController@getBoMon')->name('admin.get.bomon');
-        Route::get('/tim-kiem/getnganh/{id}','AdminScholarSearchController@getNganh')->name('admin.get.nganh');
-        Route::get('/tim-kiem/getlop/{id}','AdminScholarSearchController@getLop')->name('admin.get.lop');
-    	});
-		//Trao học bổng
-		Route::get('/traohocbong/{id}','AdminAwardScholarController@create')->name('admin.award.scholar');
-		Route::post('/traohocbong/{id}','AdminAwardScholarController@store');
-		//Kiểm tra lịch sử
-		Route::get('/history/{id}','AdminAwardScholarController@edit')->name('admin.edit.award');
-		Route::get('/edit-history/{id}','AdminAwardScholarController@editHistory')->name('admin.edit.history');
-		Route::post('/edit-history/{id}','AdminAwardScholarController@update')->name('admin.save.history');
-		//Import
-		Route::get('hocbong', 'AdminScholarController@importHB')->name('admin.hocbong.import');
-		Route::post('/import_excel/import', 'AdminScholarController@import')->name('test.abc');
-		//import test
-		Route::get('hocbong/import', 'AdminScholarController@adminimport')->name('admin_hocbong_import');
-		Route::post('hocbong/import', 'AdminScholarController@adminimportstore')->name('post_admin_hocbong_import');
+  //       //
+  //       //Học bổng (Tìm sinh viên)
+  //       Route::get('/tim-kiem','AdminScholarSearchController@StudentSearch')->name('admin.search.student');
+        
+  //   	});
+		// //Trao học bổng
+		// Route::get('/traohocbong/{id}','AdminAwardScholarController@create')->name('admin.award.scholar');
+		// Route::post('/traohocbong/{id}','AdminAwardScholarController@store');
+		// //Kiểm tra lịch sử
+		// Route::get('/history/{id}','AdminAwardScholarController@edit')->name('admin.edit.award');
+		// Route::get('/edit-history/{id}','AdminAwardScholarController@editHistory')->name('admin.edit.history');
+		// Route::post('/edit-history/{id}','AdminAwardScholarController@update')->name('admin.save.history');
+		// //Import
+		// // Route::get('hocbong', 'AdminScholarController@importHB')->name('admin.hocbong.import');
+		// // Route::post('/import_excel/import', 'AdminScholarController@import')->name('test.abc');
+		// //
+		// Route::get('hocbong/import', 'AdminScholarController@adminimport')->name('admin_hocbong_import');
+		// Route::post('hocbong/import', 'AdminScholarController@adminimportstore')->name('post_admin_hocbong_import');
+		// //Thống kê
+		// Route::get('thong-ke/khoa-moi/nam-hoc/{id}/{idnamhoc}','AdminScholarStatistic@faculty')->name('admin.statistic.faculty.year');
+		// Route::get('thong-ke/khoa-moi/hoc-ky/{id}/{idhocky}','AdminScholarStatistic@facultySemester')->name('admin.statistic.faculty.semester');
+		
+		// Route::get('thong-ke/lop-moi/nam-hoc/{id}/{idnamhoc}','AdminScholarStatistic@class')->name('admin.statistic.class.byyear');
+		// Route::get('thong-ke/lop-moi/hoc-ky/{id}/{idhocky}','AdminScholarStatistic@classSemester')->name('admin.statistic.class.bysemester');
+		// Route::get('thong-ke/khoa-cu/{id}/{idhknh}','AdminScholarStatistic@faculty_old')->name('admin.statistic.faculty.old');
+		// Route::get('thong-ke/lop-cu/{id}/{idhknh}','AdminScholarStatistic@class_old')->name('admin.statistic.class.old');
+		
+		// Route::get('thong-ke/sinh-vien/{id}','AdminScholarStatistic@class')->name('admin.get.history.student');
 
-		//
+		// Route::get('thong-ke/nam/','AdminScholarStatistic@year')->name('admin.get.history.year');
+		// Route::get('/info/{id}','AdminScholarController@info')->name('admin.get.list.info.scholar');
+		// Route::get('/xuat-pdf/{id}','AdminScholarController@exportpdf')->name('admin.get.export.pdf');
+		//----------------------------END TTCK-------------------------------------------------------
 		Route::get('', 'ServiceAdminController@index')->name('admin');
 		Route::get('trangthaihocky', 'TrangThaiHocKyController@index')->name('trangthaihocky');
 		Route::post('trangthaihocky', 'TrangThaiHocKyController@store')->name('post_trangthaihocky');
@@ -477,6 +488,7 @@ Route::middleware('auth')->group(function(){
 			Route::post('dangky/hoatdongsukien','DangKyHoatDongSuKienController@sinhvien_store')->name('post_sinhvien_dangkyhoatdongsukien_store');
 			Route::post('{idhocky}','HoatDongSuKienController@HoatDongSuKienTheoHocKy')->name('sinhvien_hoatdongsukien_hocky');
 		});
+		
 		
 	});
 	/**

@@ -36,8 +36,8 @@ function CheckAuthentication()
 // LicenseKey : Paste your license key here. If left blank, CKFinder will be
 // fully functional, in demo mode.
 // $config['LicenseName'] = '@nhoangtung';
-$config['LicenseName'] = '@nhoanganh';
-$config['LicenseKey'] = 'F7DS62DJL64TNGAV2QQQFJTV8Q4DY7LU';
+$config['LicenseName'] = 'vietagu';
+$config['LicenseKey'] = 'AS914XAT6C92P82WASD771FWX8HQJ8W5';
 
 /*
  Uncomment lines below to enable PHP error reporting and displaying PHP errors.
@@ -66,7 +66,7 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$baseUrl = '/diemrenluyen/public/images/upload/';
+$baseUrl = '/diemrenluyen/images/upload/';
 // $baseUrl = '/public/js/ckfinder/userfiles/';
 
 

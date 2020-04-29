@@ -370,4 +370,10 @@ class HocKyNamHocController extends Controller
     {
         return HocKyNamHoc::find($idHocKyNamHoc);
     }
+    //
+    public static function GetidKhoaByTenHKNH($TenHKNH = '')
+    {
+        
+        return HocKyNamHoc::where('tenhockynamhoc', '=', strtoupper(trim($TenHKNH)))->first();
+    }
 }

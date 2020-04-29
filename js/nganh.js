@@ -51,6 +51,7 @@ function CapNhatNganh($ID, $MaNganh, $TenNganh, $KyHieuNganh, $IDBoMon, $IDBacDa
     $('#IDBoMon_CapNhat').val($IDBoMon);
     $('#IDBacDaoTao_CapNhat').val($IDBacDaoTao);
     $('#IDHeDaoTao_CapNhat').val($IDHeDaoTao);
+    
 }
 
 function hasError_Nganh(data) {

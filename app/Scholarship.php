@@ -14,4 +14,8 @@ class Scholarship extends Model
     public function HocKyNamHoc(){
     	return $this->belongsTo(HocKyNamHoc::class,'idhockynamhoc');
     }
+    public function phamvi(){
+    	return $this->hasMany('App\HocBongKhoa','id');
+    }
+    
 }

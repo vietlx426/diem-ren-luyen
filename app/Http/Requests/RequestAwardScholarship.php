@@ -24,13 +24,13 @@ class RequestAwardScholarship extends FormRequest
     public function rules()
     {
         return [
-            'idhocbong'=>'required',
+            'id_hocbong'=>'required',
             'giatri'=>'required',
         ];
     }
     public function messages(){
         return [
-            'idhocbong.required'=>'Vui lòng chọn học bổng',
+            'id_hocbong.required'=>'Vui lòng chọn học bổng',
         
             'giatri.required'=>'Vui lòng nhập giá trị học bổng',
             

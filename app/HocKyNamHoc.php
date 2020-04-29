@@ -28,4 +28,5 @@ class HocKyNamHoc extends Model
         return $this->hasOne('App\HocKyNamHocBoTieuChi', 'hockynamhoc_id');
     }
     
+    
 }

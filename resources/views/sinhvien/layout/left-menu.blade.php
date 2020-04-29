@@ -9,6 +9,7 @@
             <li> <a href="{{route('sinhvien_bangdiemrenluyen')}}"><i class="fa fa-list-alt"></i>KẾT QUẢ RÈN LUYỆN</a> </li>
             <li> <a href="{{route('sinhvien_hoatdongsukien')}}"><i class="fa fa-futbol-o"></i>HOẠT ĐỘNG - SỰ KIỆN</a> </li>
             <li> <a href="{{route('sinhvien_profile')}}"><i class="fa fa-file-text"></i>THÔNG TIN LÝ LỊCH</a> </li>
+            <li> <a href="{{route('sinhvien.hocbong')}}"><i class="fa fa-file-text"></i>THÔNG TIN HỌC BỔNG</a> </li>
         </div>
     </div>
     <!-- /sidebar menu -->
