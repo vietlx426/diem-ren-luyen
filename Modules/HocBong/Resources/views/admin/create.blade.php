@@ -26,18 +26,8 @@
           <form method="POST" action="" enctype="multipart/form-data" class="form-horizontal form-label-left">
           {{csrf_field()}}
 
-         <!--  <div class="form-group col-md-12">
-          <div class="form-group col-md-4{{$errors->has('tenhoatdongsukien')? ' has-error' : ''}}">
-                <label class="control-label">Mã học bổng</label>
-                <input type="text" id="mahb" name="mahb" class="form-control" value="{{old('mahb')}}" placeholder="Mã học bổng">
-                @if ($errors->has('mahb'))
-                        <span class="help-block">
-                          <strong style="color: red">{{ $errors->first('mahb') }}</strong>
-                        </span>
-                @endif
-          </div>
-          </div> -->
-            <div class="form-group col-md-4{{$errors->has('tenhoatdongsukien')? ' has-error' : ''}}">
+         
+            <div class="form-group col-md-4{{$errors->has('mahb')? ' has-error' : ''}}">
                 <label class="control-label">Mã học bổng</label>
                 <input type="text" id="mahb" name="mahb" class="form-control" value="{{old('mahb')}}" placeholder="Mã học bổng">
                 @if ($errors->has('mahb'))
@@ -277,6 +267,14 @@
     <script src="{{URL::asset('js/ckfinder/ckfinder.js')}}"></script>
   
      <script src="{{URL::asset('js/jquery.min.js')}}"></script>
+     <script>
+    var msg = '{{Session::get('alert')}}';
+    var exist = '{{Session::has('alert')}}';
+    if(exist){
+      alert(msg);
+    }
+    
+  </script>
       <script>
           $('#select_all').change(function() {
           var checkboxes = $(this).closest('form').find(':checkbox').not($(this));

@@ -92,5 +92,13 @@
     <script>
       var url_route_admin_get_bomonbykhoa = "{{route('admin_get_bomonbykhoa')}}";
     </script>
+    <script>
+    var msg = '{{Session::get('alert')}}';
+    var exist = '{{Session::has('alert')}}';
+    if(exist){
+      alert(msg);
+    }
+    
+  </script>
 
 @endsection

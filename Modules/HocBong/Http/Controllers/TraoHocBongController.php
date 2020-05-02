@@ -50,7 +50,8 @@ class TraoHocBongController extends Controller
         if($Request->giatri <= (($budget->gthb) - $budget_recent)){
             if(!$check)
             {
-                $award=new TraoHocBong;
+               try {
+                    $award=new TraoHocBong;
 
                 $award->id_hocbong=$Request->id_hocbong;
                 $award->id_sinhvien=$Request->id_sinhvien;
@@ -59,6 +60,9 @@ class TraoHocBongController extends Controller
                 
                 $award->save();
                 return redirect()->route('hocbong.timkiem.sinhvien')->with('alert', 'Đã trao học bổng \"'.$budget->tenhb.' cho sinh viên '.$info_student->hochulot.' '.$info_student->ten);
+               } catch (Exception $e) {
+                   return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+               }
 
             }
             else{
@@ -109,13 +113,18 @@ class TraoHocBongController extends Controller
         return redirect()->back();
     }
     public function update(Request $Request,$id){
-        $save_history=LichSuHocBong::find($id);
+        try {
+            $save_history=LichSuHocBong::find($id);
         $save_history->id_hocbong=$Request->id_hocbong;
         $save_history->id_sinhvien=$Request->id_sinhvien;
         $save_history->giatri=$Request->giatri;
         $save_history->save();
+        
         return redirect()->back();
-
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
+        
     }
     public function getHB(){
         return HocBong::all();

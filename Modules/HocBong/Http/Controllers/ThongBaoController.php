@@ -69,7 +69,8 @@ class ThongBaoController extends Controller
     {
         
 
-        $thongbao = new ThongBaoHocBong;
+        try {
+            $thongbao = new ThongBaoHocBong;
         $thongbao->tieude=$request->tieude;
         
         $thongbao->noidung=$request->noidung;
@@ -98,6 +99,9 @@ class ThongBaoController extends Controller
         
         
         return redirect()->route('hocbong.thongbao')->with('success', "Thêm thành công thành công!");
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
     }
 
     /**
@@ -138,7 +142,8 @@ class ThongBaoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $thongbao=ThongBaoHocBong::find($id);
+        try {
+            $thongbao=ThongBaoHocBong::find($id);
         $thongbao->tieude=$request->tieude;
         
         $thongbao->noidung=$request->noidung;
@@ -149,6 +154,9 @@ class ThongBaoController extends Controller
         $thongbao->save();
       
         return redirect()->route('hocbong.thongbao');
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
     }
 
     /**
@@ -179,23 +187,32 @@ class ThongBaoController extends Controller
         return view('hocbong::admin.vanban_index',$viewData);
     }
     public function postThemVanBan(VanBanRequest $request){
-        
-        
-        $vanban = new ThongBaoVanBan;
+        try {
+            $vanban = new ThongBaoVanBan;
         $vanban->id_thongbao=$request->MaThongBao;
         $vanban->tenfile=$request->TenVanBan;
         $vanban->url=$request->DinhKem;
         $vanban->save();
          return redirect()->route('vanban.index',$request->MaThongBao)->with('success', "Thêm thành công!");
+
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
+        
+                 
         
     }
     public function postSuaVanBan(Request $request){
-        $vanban = ThongBaoVanBan::find($request->IDVanBan_edit);
+        try {
+            $vanban = ThongBaoVanBan::find($request->IDVanBan_edit);
         $vanban->tenfile=$request->TenVanBan_edit;
         $vanban->url=$request->DinhKem_edit;
         $vanban->save();
         return redirect()->back();
-
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
+        
     }
     public function XoaVanBan($id)
     {

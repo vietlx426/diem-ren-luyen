@@ -273,7 +273,7 @@ class HocBongController extends Controller
         $ds_khoa=$this->getKhoa();
         return view('hocbong::admin.create',compact('ds_khoa','hockynamhoc'));
     }
-    public function store(RequestScholarship $RequestScholarship,ThongBaoRequest $ThongBaoRequest){
+    public function store(RequestScholarship $RequestScholarship){
        
 
         if($RequestScholarship->khoa == null)
@@ -282,7 +282,8 @@ class HocBongController extends Controller
         }
         else
         {
-            $scholar=new HocBong;
+            try {
+                $scholar=new HocBong;
             $scholar->mahb=$RequestScholarship->mahb;
             $scholar->tenhb=$RequestScholarship->tenhb;
             $scholar->tendvtt=$RequestScholarship->tendvtt;
@@ -303,15 +304,15 @@ class HocBongController extends Controller
 
             
             }
-            if($ThongBaoRequest->tieude && $ThongBaoRequest->noidung)
+            if($RequestScholarship->tieude && $RequestScholarship->noidung)
             {
                 $thongbao = new ThongBaoHocBong;
-                $thongbao->tieude=$ThongBaoRequest->tieude;
+                $thongbao->tieude=$RequestScholarship->tieude;
                 
-                $thongbao->noidung=$ThongBaoRequest->noidung;
+                $thongbao->noidung=$RequestScholarship->noidung;
                 $thongbao->id_hocbong=$scholar->id;
                 $thongbao->author=Auth::user()->id;
-                $thongbao->slug=str_slug($ThongBaoRequest->tieude);
+                $thongbao->slug=str_slug($RequestScholarship->tieude);
                 $thongbao->status=1;
                 $thongbao->created_at=Carbon::now();
 
@@ -332,9 +333,13 @@ class HocBongController extends Controller
                    }
                 }
             }
+            return redirect()->route('hocbong.index')->with('alert_them', 'Đã thêm học bổng thành công! ');
+            } catch (Exception $e) {
+                 return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+            }
         }
 
-          return redirect()->route('hocbong.index')->with('alert_them', 'Đã thêm học bổng thành công! ');
+          
     }
     public function getKhoa(){
         return Khoa::where('loaikhoaphong_id','=',1)->get();
@@ -344,10 +349,8 @@ class HocBongController extends Controller
     public function update(Request $RequestScholarship,$id){
          
             HocBongKhoa::where('id_hocbong',$id)->delete();
-
-
-
-            $scholar=HocBong::find($id);
+            try {
+                $scholar=HocBong::find($id);
             $scholar->mahb=$RequestScholarship->mahb;
             $scholar->tenhb=$RequestScholarship->tenhb;
             $scholar->tendvtt=$RequestScholarship->tendvtt;
@@ -355,6 +358,7 @@ class HocBongController extends Controller
            
             $scholar->soluong=$RequestScholarship->soluong;
             $scholar->gthb=$RequestScholarship->gthb;
+            $scholar->gtmoihocbong=$RequestScholarship->gtmoihocbong;
             $scholar->save();
             
             foreach ($RequestScholarship->khoa as $key => $idKhoa) {
@@ -368,7 +372,10 @@ class HocBongController extends Controller
             }
 
 
-            return redirect()->route('hocbong.admin.index')->with('alert_sua', "Lưu thành công!");
+            return redirect()->route('hocbong.index')->with('alert_sua', "Lưu thành công!");
+            } catch (Exception $e) {
+                return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+            }
             
         
 
