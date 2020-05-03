@@ -7,8 +7,14 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\HocBong;
 use App\TraoHocBong;
+use App\HocBongKhoa;
+
+use App\HocKyNamHoc;
 use Session;
 use App\Http\Requests\RequestAwardScholarship;
+use Modules\HocBong\Http\Requests\ImportDSSVHBRequest;
+use Excel;
+
 use Illuminate\Support\Facades\Input;
 use App\LichSuHocBong;
 use App\SinhVien;
@@ -192,5 +198,210 @@ class TraoHocBongController extends Controller
         }
         
         return $arrayMessage;
+    }
+
+    public function importDSSVHB()
+    {
+        return view('hocbong::admin.importDSSVHB');
+    }
+    public function importDSSVHBstore(ImportDSSVHBRequest $request)
+    {
+       
+        
+        $MAX_ROW = 100000;
+
+        if($request->hasFile('input_file')){
+            $path = $request->file('input_file')->getRealPath();
+
+            $reader = Excel::load($request->file('input_file')->getRealPath());
+
+            $numRow = $reader->get()->count();
+            $numRow = min($numRow, $MAX_ROW);
+
+            
+            $numColumn = 8;
+            $reader->takeRows($numRow);
+
+            
+            $reader->takeColumns($numColumn);
+
+            $countRowExcel = 1;
+            $arrayMessage = array('result' => true, 'message' => "" );
+
+            foreach ($reader->toArray() as $key => $DSSV) {
+                $countRowExcel++;
+                $resultMessage = self::validateDSSVHBImport($DSSV);
+
+                if($resultMessage['result'] == false)
+                {
+                    $arrayMessage['result'] = false;
+                    $arrayMessage['message'] .= "&#13; Dòng " . $countRowExcel . ": " . $resultMessage['message'];
+                }
+            }
+        
+            if($arrayMessage['result'])
+            {
+                foreach ($reader->toArray() as $key => $DSSV) {
+
+                    
+                    $HocBong = self::storeDSSVHB($DSSV);
+
+                   
+                    
+                }
+                return redirect()->route('hocbongsinhvien.import')->with('success', "Import thành công.");
+            }
+            else
+            {
+                return redirect()->route('hocbongsinhvien.import')->withInput()->with(['message'=>$arrayMessage['message']]);
+            }
+        }
+        else
+            return redirect()->back()->with(['danger'=>"Không tìm thấy file để import.<br>Vui lòng refresh (hoặc nhấn F5) và chọn/nhập lại thông tin"]);
+    }
+    public function storeDSSVHB($DSSV)
+    {
+        try {
+            $getIdSV = SinhVien::where('mssv', 'like',$DSSV['mssv'] )->first();
+
+            $maHB=$DSSV['mahb'];
+     
+            $idHB_array = self::getIdHBByName($maHB);
+            foreach ($idHB_array as $key => $idHB) {
+                $data = new LichSuHocBong;
+                $data->giatri=$DSSV['giatri'];
+                $data->id_sinhvien=$getIdSV ? $getIdSV->id : "";
+
+                $data->id_hocbong = $idHB;
+
+                $data->save();
+            }
+
+
+
+           
+
+            
+            return $data;
+
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    public function validateDSSVHBImport($DSSV)
+    {
+        $arrayMessage = array('result' => true, 'message' => "" );
+
+        
+        if(empty(trim($DSSV['mssv'])))
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Không mã sinh viên; ";
+        }
+
+      
+        if(empty(trim($DSSV['tensv'])))
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Không có tên SV; ";
+        }
+
+
+     
+        
+
+        $getIDSV=SinhVien::where('mssv', '=',$DSSV['mssv'])->first();
+        $maHBExist = self::getIdHBByName($DSSV['mahb']);
+        $check = LichSuHocBong::whereIn('id_hocbong',$maHBExist)->where('id_sinhvien',$getIDSV->id)->get();
+
+        $arrMAHB=array();
+        foreach ($check as $key => $value) {
+            array_push($arrMAHB, $value->HocBong->mahb);
+        }
+        $getMAHB = implode(", ", $arrMAHB);
+
+        //----------------------Check sinh viên có nằm trong scope học bổng
+
+        $checkScope = HocBongKhoa::whereIn('id_hocbong',$maHBExist)
+        ->join('khoa','khoa.id','=','hocbong_phamvi.id_khoa')
+        ->join('bomon','bomon.idkhoa','=','khoa.id')
+        ->join('nganh','nganh.idbomon','=','bomon.id')
+        ->join('lop','lop.nganh_id','=','nganh.id')
+        ->join('sinhvien','sinhvien.lop_id','=','lop.id')
+        ->where('sinhvien.mssv',$DSSV['mssv'])
+        ->get();
+      
+        $arr=array();
+        foreach ($checkScope as $key => $value2) {
+            array_push($arr, $value2->belong->mahb);
+        }
+        $arrayHB=explode(". ",$DSSV['mahb']);
+        $arr1 = $arr;
+        $arr2 = $arrayHB;
+        $diff1 = array_diff($arr1, $arr2);
+        $diff2 = array_diff($arr2, $arr1);
+        $result=implode(" ", array_merge($diff1, $diff2));
+
+        if(count($checkScope) < count($arrayHB))
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Sinh viên ".$getIDSV->hochulot." ".$getIDSV->ten."(".$getIDSV->mssv.")"." không thuộc phạm vi của học bổng ".$result;
+            ;
+        }
+
+        //-------------------------end----
+        //---check sinh viên đã nhận học bổng đó hay chưa
+        if(count($check)>0)
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Sinh viên ".$getIDSV->hochulot." ".$getIDSV->ten."(".$getIDSV->mssv.")"." đã nhận học bổng "
+            .$getMAHB." trước đó, vui lòng chọn lại!";
+            ;
+        }
+        //-----------------end-------
+        if($maHBExist === null)
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Mã học bổng chưa có trên hệ thống;";
+        }
+
+        
+
+        $SinhVienExist = SinhVien::where('mssv', '=', $DSSV['mssv'])
+        ->where('hochulot','=',$DSSV['hochulot'])
+        ->where('ten','=',$DSSV['tensv'])
+        ->get();
+        if(count($SinhVienExist) == 0 )
+        {
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Sinh viên không tồn tại trên hệ thống; ";
+        }
+
+
+        
+        
+
+        return $arrayMessage;
+    }
+    public function getIdHBByName($mahb='')
+    {   
+
+
+        $arrayHB=explode('. ', $mahb);
+        $check=HocBong::whereIn('mahb',$arrayHB)->get();
+        $collection = collect($arrayHB);
+
+        if(count($check) === count($arrayHB))
+        {
+            $idHB_array = $collection->map(function ($item, $key){
+                $tmp=HocBong::where('mahb', '=',$item)
+                ->first();
+                return $item = $tmp->id;
+            });
+
+         return $idHB_array;
+        }
+        else
+            return null;
     }
 }

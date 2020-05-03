@@ -87,7 +87,14 @@
     @parent
     <!-- Upload bar -->
     <script src="{{URL::asset('js/mystyle_fileinput.js')}}"></script>
-
+    <script>
+    var msg = '{{Session::get('alert')}}';
+    var exist = '{{Session::has('alert')}}';
+    if(exist){
+      alert(msg);
+    }
+  
+  </script>
     <script type="text/javascript">
       $('.btnimport').click(function(){
         loadereffectshow();

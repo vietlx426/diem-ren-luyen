@@ -17,4 +17,8 @@ class HocBong extends Model
     public function phamvi(){
     	return $this->hasMany('App\HocBongKhoa','id');
     }
+    public function lichsu(){
+        return $this->hasMany('App\LichSuHocBong','id_hocbong');
+    }
+
 }

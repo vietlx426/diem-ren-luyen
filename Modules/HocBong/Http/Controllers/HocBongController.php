@@ -412,7 +412,7 @@ class HocBongController extends Controller
             $numRow = min($numRow, $MAX_ROW);
 
             
-            $numColumn = 10;
+            $numColumn = 8;
             $reader->takeRows($numRow);
 
             

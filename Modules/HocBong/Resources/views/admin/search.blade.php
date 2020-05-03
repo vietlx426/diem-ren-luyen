@@ -23,6 +23,9 @@
           </li>
         </ul>
         <div class="pull-right">
+          <a href="{{route('hocbongsinhvien.import')}}" class="btn btn-success student_import">
+            <strong><i class="fa fa-upload"></i> IMPORT</strong>
+          </a>
         </div>
         <div class="clearfix"></div>
       </div>

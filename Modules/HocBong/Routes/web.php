@@ -36,6 +36,9 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	Route::get('hocbong/import', 'HocBongController@adminimport')->name('hocbong.import');
 	Route::post('hocbong/import', 'HocBongController@adminimportstore');
 
+	Route::get('hocbongsinhvien/import', 'TraoHocBongController@importDSSVHB')->name('hocbongsinhvien.import');
+	Route::post('hocbongsinhvien/import', 'TraoHocBongController@importDSSVHBstore');
+
 	Route::get('thong-ke/lop-moi/nam-hoc/{id}/{idnamhoc}','ThongKeController@class')->name('thongke.lop.theo.nammoi');
 	Route::get('thong-ke/lop-moi/hoc-ky/{id}/{idhocky}','ThongKeController@classSemester')->name('thongke.lop.theo.hockymoi');
 	Route::get('/info/{id}','HocBongController@info')->name('thongke.theo.hocbong.namcu');

@@ -138,5 +138,7 @@ class TimKiemSinhVienController extends Controller
     public function category(){
         return $this->belongsTo(Scholarship::class,'id_hocbong');
     }
+
+    
    
 }

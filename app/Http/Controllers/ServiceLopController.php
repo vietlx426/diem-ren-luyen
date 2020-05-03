@@ -162,7 +162,6 @@ class ServiceLopController extends Controller
 
 	public static function GetClassByClassName($tenLop = '')
 	{
-		dd($tenLop);
 		return Lop::where('tenlop', '=', strtoupper(trim($tenLop)))->first();
 	}
 }
