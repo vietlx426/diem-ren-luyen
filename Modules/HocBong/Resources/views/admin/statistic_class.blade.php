@@ -18,6 +18,7 @@
       <div class="x_panel">
         <div class="x_title">
           <h2> <i class="fa fa-user-secret"></i>Thống kê học bổng của Lớp {{$tenlop->tenlop}}
+            {{isset($getTenNH) ?  'Năm học '.$getTenNH->tennamhoc : $getTenHKNH->tenhockynamhoc}}
        </h2>
         <div class="x_content">
         <div class="row">
@@ -76,7 +77,8 @@
                       <th width="10%">STT</th>
                       <th width="23%">Tên sinh viên</th>
                       <th width="10%">Tên học bổng đã nhận</th>
-                     
+                     <th width="10%">Điểm học tập</th>
+                     <th width="10%">Điểm rèn luyện</th>
                       <th width="10%">Tổng giá trị đã trao</th>
                       <th></th>
                       
@@ -100,6 +102,8 @@
                   
                   @endforeach
                   </td>
+                  <td>{{$data->diemhoctap}}</td>
+                 <td>{{$data->diemrenluyen}}</td>
                  <td>
                   {{ number_format(($soluong_hb->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
 

@@ -148,7 +148,7 @@
       </div>
       
       
-      <form action="{{route('asdasddasa')}}" method="POST">
+      <form action="{{route('admin.traoHB')}}" method="POST">
                 {{csrf_field()}}
         <div class="x_content">
         <div class="row">

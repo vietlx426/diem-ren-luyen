@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
  
 class ExportController extends Controller
 {
-    public function testExcel($id, Request $request)
+    public function xuatExcel($id, Request $request)
     {
     	
     	

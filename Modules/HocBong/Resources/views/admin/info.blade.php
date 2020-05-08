@@ -131,6 +131,8 @@
                      
                       
                       <th width="10%">Lớp</th>
+                      <th width="10%">Điểm học tập</th>
+                      <th width="10%">Điểm rèn luyện</th>
                       <th width="20%">Số tiền đã trao</th>
                       
                   </tr>
@@ -160,6 +162,8 @@
                     
                    
                  </td>
+                 <td>{{$data->diemhoctap}}</td>
+                 <td>{{$data->diemrenluyen}}</td>
                  <td>
                   {{number_format($data->giatri,'0',',','.')}} đ
 

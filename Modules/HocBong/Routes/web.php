@@ -66,10 +66,10 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	//
 
 	//Excel
-	Route::get('testexcel/{id}', 'ExportController@testExcel')->name('xuatexcel');
+	Route::get('xuatexcel/{id}', 'ExportController@xuatExcel')->name('xuatexcel');
 
 	//
-	Route::post('testtrao', 'TraoHocBongController@testTrao')->name('asdasddasa');
+	Route::post('traohocbong', 'TraoHocBongController@TraoHB')->name('admin.traoHB');
 
 
 	Route::get('namhoc/hknh/{idnamhoc?}', 'HocBongController@GetHKNHByNH')->name('admin_get_hknhbyhk');
@@ -81,9 +81,10 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 Route::middleware('sinhvien')->prefix('sinhvien')->group(function(){
 
 	Route::prefix('hocbong')->group(function(){
-			Route::get('','ThongKeController@sinhvien_index_hocbong')->name('sinhvien.hocbong');
-			Route::get('xemchitiet/{$idhocky}','ThongKeController@sinhvien_list_hocbong')->name('sinhvien.xem');
-			Route::get('chitiet-hocbong/{id}','ThongKeController@sinhvien_chitiet')->name('test');
+			Route::get('','SinhVienController@sinhvien_index_hocbong')->name('sinhvien.hocbong');
+			Route::get('thongbao-hocbong/{id}','SinhVienController@sinhvien_thongbao')->name('sinhvien.thongbao.hocbong');
+			Route::get('chitiet-ketqua/{id}','SinhVienController@sinhvien_chitiet')->name('sinhvien.chitiet.ketqua');
+			Route::get('/download/{id}','SinhVienController@sinhvien_download')->name('sinhvien.download');
 		});
 		
 

@@ -130,7 +130,7 @@ class ThongKeController extends Controller
     
     public function class($id,$idnamhoc){
         $tenlop=Lop::where('id',$id)->first();
-
+        $getTenNH=NamHoc::where('id',$idnamhoc)->first();
          $soluong_hb=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
          ->join('lop','lop.id','=','sinhvien.lop_id')
         ->where('lop.id','=',$id)
@@ -141,6 +141,10 @@ class ThongKeController extends Controller
 
         $dssv=SinhVien::where('lop_id',$id)
         ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('bangdiemhoctap','bangdiemhoctap.hockynamhoc_id','=','hocbong.idhockynamhoc')
+        ->join('bangdiemrenluyen','bangdiemrenluyen.hocky_namhoc_id','=','hocbong.idhockynamhoc')
+        ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as diemrenluyen')
         ->groupBy('sinhvien.id')
         ->get();
         $dshb=LichSuHocBong::all();
@@ -152,6 +156,7 @@ class ThongKeController extends Controller
 
         $viewData=[
             'tenlop'=>$tenlop,
+            'getTenNH'=>$getTenNH,
             'dssv'=>$dssv,
             'dshb'=>$dshb,
             'soluong_hb'=>$soluong_hb,
@@ -162,7 +167,7 @@ class ThongKeController extends Controller
     }
     public function classSemester($id,$idhknh){
         $tenlop=Lop::where('id',$id)->first();
-
+        $getTenHKNH=HocKyNamHoc::where('id',$idhknh)->first();
          $soluong_hb=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
          ->join('lop','lop.id','=','sinhvien.lop_id')
         ->where('lop.id','=',$id)
@@ -178,6 +183,7 @@ class ThongKeController extends Controller
 
         $viewData=[
             'tenlop'=>$tenlop,
+            'getTenHKNH'=>$getTenHKNH,
             'soluong_hb'=>$soluong_hb,
             
 
@@ -186,35 +192,9 @@ class ThongKeController extends Controller
     }
 
     
-    public function sinhvien_index_hocbong(){
-      $idSV=Auth::user()->cbgvsv_id;
-      $dsHKNH = HocKyNamHocController::DanhSachHocKyNamHocCuaSinhVien($idSV);
-      $dsHocBong=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-      ->where('lichsu_hocbong.id_sinhvien','=',$idSV)->get();
-
-      $viewData=[
-        'dsHKNH'=>$dsHKNH,
-        'dsHocBong'=>$dsHocBong,
-      ];
-      return view('hocbong::sinhvien.index',$viewData);
-    }
     
-    public function sinhvien_chitiet($idhocky){
-      $idSV=Auth::user()->cbgvsv_id;
-      $dsHocBong=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-      ->where('hocky_namhoc.id','=',$idhocky)
-      ->where('lichsu_hocbong.id_sinhvien','=',$idSV)
-      ->get();
-      $getHKNH=HocKyNamHoc::find($idhocky);
-
-      $viewData=[
-        'getHKNH'=>$getHKNH,
-        'dsHocBong'=>$dsHocBong,
-      ];
-      return view('hocbong::sinhvien.hocbong_chitiet',$viewData);
-    }
+    
+    
    
     
     

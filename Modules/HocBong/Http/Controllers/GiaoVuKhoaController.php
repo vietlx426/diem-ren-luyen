@@ -109,7 +109,7 @@ class GiaoVuKhoaController extends Controller
     public function giaovukhoa_download($id){
       $vanban=ThongBaoVanBan::where('id',$id)->first();
     
-      $path=config('app.url').':8080'."/diemrenluyen/images/upload/files/".$vanban->url;
+      $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
     }
 }

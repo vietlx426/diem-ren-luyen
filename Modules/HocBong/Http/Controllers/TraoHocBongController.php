@@ -106,13 +106,13 @@ class TraoHocBongController extends Controller
         $count = LichSuHocBong::where('id_sinhvien',$id)->get();
         // $countMoney = LichSuHocBong::where('id_sinhvien',$id)->sum('giatri');
 
-        return view('hocbong::history',compact('history','idsinhvien','getHB','count'));
+        return view('hocbong::admin.history',compact('history','idsinhvien','getHB','count'));
     }
     public function editHistory($id){
         $edit_history=LichSuHocBong::find($id);
 
         $ds_hocbong=$this->getHB();
-        return view('hocbong::edit_history',compact('edit_history','ds_hocbong'));
+        return view('hocbong::admin.edit_history',compact('edit_history','ds_hocbong'));
     }
     public function deleteHistory($id){
         $deleteHistory=LichSuHocBong::where('id',$id)->delete();
@@ -136,7 +136,7 @@ class TraoHocBongController extends Controller
         return HocBong::all();
     }
 
-    public function testTrao(Request $request)
+    public function TraoHB(Request $request)
     {
         if($request->giatri)
         {
@@ -190,11 +190,10 @@ class TraoHocBongController extends Controller
 
     
         $HocBongExist = LichSuHocBong::where('id_sinhvien', '=', $check)->where('id_hocbong','=',$idhb)->first();
-
         if(isset($HocBongExist))
         {
             $arrayMessage['result'] = false;
-            $arrayMessage['message'] .= "Sinh viên ".$HocBongExist->infosv->hochulot." ".$HocBongExist->infosv->ten. " (".$HocBongExist->infosv->mssv.")"." đã nhận ".$HocBongExist->infoHB->tenhb." ở học kỳ này, vui lòng chọn lại!";
+            $arrayMessage['message'] .= "Sinh viên ".$HocBongExist->infosv->hochulot." ".$HocBongExist->infosv->ten. " (".$HocBongExist->infosv->mssv.")"." đã nhận ".$HocBongExist->HocBong->tenhb." ở học kỳ này, vui lòng chọn lại!";
         }
         
         return $arrayMessage;
