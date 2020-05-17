@@ -44,7 +44,7 @@ class GiaoVuKhoaController extends Controller
       ->where('hocbong_thongbao.status','=',1)
        ->where('khoa.id','=',$idKhoa->khoa_id)
        ->orderBy('hocbong_thongbao.id','dsc')
-       ->select('*','hocbong_thongbao.id as idthongbao')->get();
+       ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->get();
       
       
       return view('hocbong::giaovukhoa.index',compact('dsLop','ThongBao'));

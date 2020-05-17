@@ -139,12 +139,10 @@ class ThongKeController extends Controller
         ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
         ->get();
 
-        $dssv=SinhVien::where('lop_id',$id)
+        $dssvByNamHoc=SinhVien::where('lop_id',$id)
         ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-        ->join('bangdiemhoctap','bangdiemhoctap.hockynamhoc_id','=','hocbong.idhockynamhoc')
-        ->join('bangdiemrenluyen','bangdiemrenluyen.hocky_namhoc_id','=','hocbong.idhockynamhoc')
-        ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as diemrenluyen')
+
         ->groupBy('sinhvien.id')
         ->get();
         $dshb=LichSuHocBong::all();
@@ -157,7 +155,7 @@ class ThongKeController extends Controller
         $viewData=[
             'tenlop'=>$tenlop,
             'getTenNH'=>$getTenNH,
-            'dssv'=>$dssv,
+            'dssvByNamHoc'=>$dssvByNamHoc,
             'dshb'=>$dshb,
             'soluong_hb'=>$soluong_hb,
             
@@ -175,7 +173,15 @@ class ThongKeController extends Controller
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.id','=',$idhknh)
         ->get();
-
+        $dssvByHocKy=SinhVien::where('lop_id',$id)
+        ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+        ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+        ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as drl')
+        ->groupBy('sinhvien.id')
+        ->get();
+        $dshb=LichSuHocBong::all();
 
         
 
@@ -185,7 +191,8 @@ class ThongKeController extends Controller
             'tenlop'=>$tenlop,
             'getTenHKNH'=>$getTenHKNH,
             'soluong_hb'=>$soluong_hb,
-            
+            'dssvByHocKy'=>$dssvByHocKy,
+            'dshb'=>$dshb,
 
         ];
         return view('hocbong::admin.statistic_class',$viewData);

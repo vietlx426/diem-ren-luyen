@@ -67,6 +67,8 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 
 	//Excel
 	Route::get('xuatexcel/{id}', 'ExportController@xuatExcel')->name('xuatexcel');
+	Route::get('xuatexcel-theokhoa-namhoc/{id}/{idnamhoc}', 'ExportController@xuatExcelByKhoaByNamhoc')->name('xuatexcel.theokhoa');
+	Route::get('xuatexcel-theokhoa-hocky/{id}/{idhk}', 'ExportController@xuatExcelByKhoaByHocKy')->name('xuatexcel.theokhoa.hocky');
 
 	//
 	Route::post('traohocbong', 'TraoHocBongController@TraoHB')->name('admin.traoHB');

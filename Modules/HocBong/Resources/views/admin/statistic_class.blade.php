@@ -70,6 +70,7 @@
         <div class="x_content">
           <div class="row">
             @include('layouts.gentelella-master.blocks.flash-messages')
+            @if(isset($dssvByHocKy))
             <table id="datatable-buttons" class="table table-striped table-bordered" width="100%">
               <thead>
                
@@ -77,8 +78,10 @@
                       <th width="10%">STT</th>
                       <th width="23%">Tên sinh viên</th>
                       <th width="10%">Tên học bổng đã nhận</th>
+                      
                      <th width="10%">Điểm học tập</th>
                      <th width="10%">Điểm rèn luyện</th>
+                     
                       <th width="10%">Tổng giá trị đã trao</th>
                       <th></th>
                       
@@ -87,9 +90,9 @@
   
               </thead>
               <tbody id="tbodystudent">
-                 @if(isset($dssv))
+                 
                  <?php $STT = 0; ?>
-                @foreach($dssv as $data)
+                @foreach($dssvByHocKy as $data)
                 <tr>
                   <th >{{++$STT}}</th>
                   <td >{{$data->hochulot}} {{$data->ten}}</td>
@@ -103,7 +106,7 @@
                   @endforeach
                   </td>
                   <td>{{$data->diemhoctap}}</td>
-                 <td>{{$data->diemrenluyen}}</td>
+                 <td>{{$data->drl}}</td>
                  <td>
                   {{ number_format(($soluong_hb->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
 
@@ -114,10 +117,60 @@
                  
                 </tr>
                @endforeach
-              @endif
+             
 
               </tbody>
             </table>
+             @endif
+
+             @if(isset($dssvByNamHoc))
+            <table id="datatable-buttons" class="table table-striped table-bordered" width="100%">
+              <thead>
+               
+                  <tr class="filters">
+                      <th width="10%">STT</th>
+                      <th width="23%">Tên sinh viên</th>
+                      <th width="10%">Tên học bổng đã nhận</th>
+                     
+                      <th width="10%">Tổng giá trị đã trao</th>
+                      <th></th>
+                      
+                  </tr>
+
+  
+              </thead>
+              <tbody id="tbodystudent">
+                 
+                 <?php $STT = 0; ?>
+                @foreach($dssvByNamHoc as $data)
+                <tr>
+                  <th >{{++$STT}}</th>
+                  <td >{{$data->hochulot}} {{$data->ten}}</td>
+                  <td>
+                     
+                    @foreach($dshb as $hocbong)
+                  @if($hocbong->id_sinhvien === $data->id_sinhvien)
+                  {{$hocbong->HocBong->tenhb}}<br>
+                  @endif
+                  
+                  @endforeach
+                  </td>
+                 
+                 <td>
+                  {{ number_format(($soluong_hb->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
+
+                 </td>
+                 <td>
+                   <a href="{{route('hocbong.lichsu.sinhvien',$data->id_sinhvien)}}" class="btn btn-success"  title="Lịch sử học bổng"><i class="fa fa-university"></i></a>
+                 </td>
+                 
+                </tr>
+               @endforeach
+             
+
+              </tbody>
+            </table>
+             @endif
           </div>
         </div>
       </div>

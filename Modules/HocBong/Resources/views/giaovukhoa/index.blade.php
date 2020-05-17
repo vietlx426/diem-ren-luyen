@@ -19,20 +19,25 @@
         <p><strong>Thông báo: </strong></p>
 
           <tbody >
+           @isset($ThongBao)
            @foreach($ThongBao as $data)
-              <tr >
+              <tr>
                 <td class="">
-                  <div  style="display: flex; margin-left: 10px">
-                  <div><i class="fa fa-newspaper-o" style="color: red; font-size: 20px"></i></div>
-                  <div ><a style="padding-left: 10px" href="{{route('giaovukhoa.thongbao',$data->idthongbao)}}">{{$data->tieude}}</a></div>
+                  <a href="{{route('giaovukhoa.thongbao',[$data->idthongbao,$data->slug])}}">
+                  <div class="weekly-item" style="display: flex;">
+                      <div class="number"><i class="fa fa-newspaper-o" style="color: red; font-size: 20px"></i></div>
+                      <div class="info" style="flex-grow: 1;">
+                          <div class="singer">
+                            {{$data->tieude}}
+                          </div>
+                      </div>
+                      <div class="view-count">{{ date('d-m-yy', strtotime($data->ngaytao)) }}</div>
                   </div>
-
-                </td>
-
-
-                
+                  </a> 
+                </td>               
               </tr>
             @endforeach
+            @endif
           </tbody>
         </table>
  

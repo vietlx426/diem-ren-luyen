@@ -70,7 +70,7 @@ class ThongBaoController extends Controller
         
 
         try {
-            $thongbao = new ThongBaoHocBong;
+        $thongbao = new ThongBaoHocBong;
         $thongbao->tieude=$request->tieude;
         
         $thongbao->noidung=$request->noidung;
@@ -79,7 +79,6 @@ class ThongBaoController extends Controller
         $thongbao->slug=str_slug($request->tieude);
         $thongbao->status=1;
         $thongbao->created_at=Carbon::now();
-
         $thongbao->save();
         $index = 0;
         if($request->DinhKem && $request->tenvanban){
@@ -91,7 +90,6 @@ class ThongBaoController extends Controller
                 $vanban->tenfile=$request->tenvanban[$index];
                 $vanban->url=$url;
                 $vanban->save();
-
                 $index++;
                }
             }
@@ -104,21 +102,7 @@ class ThongBaoController extends Controller
         }
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('hocbong::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
+    
     public function edit($id)
     {
         $dsHocBong=Scholarship::join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
@@ -189,11 +173,11 @@ class ThongBaoController extends Controller
     public function postThemVanBan(VanBanRequest $request){
         try {
             $vanban = new ThongBaoVanBan;
-        $vanban->id_thongbao=$request->MaThongBao;
-        $vanban->tenfile=$request->TenVanBan;
-        $vanban->url=$request->DinhKem;
-        $vanban->save();
-         return redirect()->route('vanban.index',$request->MaThongBao)->with('success', "Thêm thành công!");
+            $vanban->id_thongbao=$request->MaThongBao;
+            $vanban->tenfile=$request->TenVanBan;
+            $vanban->url=$request->DinhKem;
+            $vanban->save();
+             return redirect()->route('vanban.index',$request->MaThongBao)->with('success', "Thêm thành công!");
 
         } catch (Exception $e) {
             return redirect()->back()->with('alert','Đã có lỗi xảy ra');

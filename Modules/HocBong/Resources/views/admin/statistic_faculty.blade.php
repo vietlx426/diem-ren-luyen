@@ -19,8 +19,30 @@
         <div class="x_title">
           <h2> <i class="fa fa-user-secret"></i>Thống kê học bổng của Khoa {{$tenkhoa->tenkhoa}}, Năm học {{isset($getNamHoc) ? $getNamHoc->tennamhoc : $getHKNH->tenhockynamhoc}}
        </h2>
+       <div class="pull-right">
+        <?php
+          if(isset($getNamHoc)){
+        ?>
+          <a href="{{route('xuatexcel.theokhoa',[$tenkhoa->id,$getNamHoc->id])}}" class="btn btn-success">
+            <strong><i class="fa fa-download"></i> EXPORT</strong>
+          </a>                                                           
+        <?php                       
+        }
+        else{
+        ?>
+        <a href="{{route('xuatexcel.theokhoa.hocky',[$tenkhoa->id,$getHKNH->id])}}" class="btn btn-success">
+            <strong><i class="fa fa-download"></i> EXPORT</strong>
+          </a>      
+        <?php 
+        }
+        ?>
+        
+      
+       
+        </div>
         <div class="x_content">
         <div class="row">
+
           
 
           

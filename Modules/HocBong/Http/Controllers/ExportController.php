@@ -7,6 +7,10 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\HocBong;
 use App\NamHoc;
+use App\Lop;
+use App\Khoa;
+use App\HocKyNamHoc;
+
 use Modules\HocBong\Entities\HocBongExport;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -35,17 +39,23 @@ class ExportController extends Controller
 
 	         		$data= DB::table('lichsu_hocbong')
 	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
 	         		->join('lop','lop.id','=','sinhvien.lop_id')
 	         		->where('lichsu_hocbong.id_hocbong',$hb->idhb)
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->groupBy('sinhvien.id')
 	         		->get()
 	         		->toArray();
-	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Số tiền');
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
 			    	foreach ($data as  $dt) 
 			    	{
 			    		$data_array[] = array(
 				       'MSSV'  		  => $dt->mssv,
-				       'Họ tên SV'    => $dt->hochulot.' '.$dt->ten,
+				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
 				       'Lớp'    	  => $dt->tenlop,
+				       'Điểm học tập'    	  => $dt->diemht,
+				       'Điểm rèn luyện'    	  => $dt->drl,
 				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
 				       
 			      	);
@@ -57,5 +67,115 @@ class ExportController extends Controller
         	
         	
         })->export('xlsx');
+    }
+    public function xuatExcelByKhoaByNamhoc($id,$idnamhoc)
+    {
+    	$hknh = HocKyNamHoc::where('idnamhoc',$idnamhoc)->first();
+    	$khoa = self::getKhoa($id);
+    	$dsLop=self::getDsLop($id);
+    	Excel::create('Thống kê học bổng khoa '.$khoa->tenkhoa.' '.$hknh->namhoc->tennamhoc, function($excel) use($dsLop,$idnamhoc) {
+
+         	foreach ($dsLop as $key => $lop) 
+         	{
+         		
+
+	        	$excel->setTitle('Danh sách sinh viên nhận học bổng');
+	        	$excel->sheet($lop->tenlop,function($sheet) use($lop,$idnamhoc) {
+
+	         		$data= DB::table('lichsu_hocbong')
+	         		->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+	         		->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+	         		->join('lop','lop.id','=','sinhvien.lop_id')
+	         		->where('lop.id',$lop->id)
+	         		->where('hocky_namhoc.idnamhoc',$idnamhoc)
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->groupBy('sinhvien.id')
+	         		->get()
+	         		->toArray();
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
+			    	foreach ($data as  $dt) 
+			    	{
+			    		$data_array[] = array(
+				       'MSSV'  		  => $dt->mssv,
+				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
+				       'Lớp'    	  => $dt->tenlop,
+				       'Điểm học tập'    	  => $dt->diemht,
+				       'Điểm rèn luyện'    	  => $dt->drl,
+				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
+				       
+			      	);
+			    	}
+	        		$sheet->fromArray($data_array,null,'A1',false,false);
+	        	});
+        	
+        	}
+        	
+        	
+        })->export('xlsx');
+    }
+    public function xuatExcelByKhoaByHocKy($id,$idhk)
+    {	
+    	$hknh = HocKyNamHoc::where('id',$idhk)->first();
+    	$khoa = self::getKhoa($id);
+    	$dsLop=self::getDsLop($id);
+    	Excel::create('Thống kê khoa '.$khoa->tenkhoa.' '.$hknh->tenhockynamhoc, function($excel) use($dsLop,$idhk) {
+
+         	foreach ($dsLop as $key => $lop) 
+         	{
+         		
+
+	        	$excel->setTitle('Danh sách sinh viên nhận học bổng');
+	        	$excel->sheet($lop->tenlop,function($sheet) use($lop,$idhk) {
+
+	         		$data= DB::table('lichsu_hocbong')
+	         		->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+	         		->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')	         		
+	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+	         		->join('lop','lop.id','=','sinhvien.lop_id')
+	         		->where('lop.id',$lop->id)
+	         		->where('hocky_namhoc.id',$idhk)
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->groupBy('sinhvien.id')
+	         		->get()
+	         		->toArray();
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
+			    	foreach ($data as  $dt) 
+			    	{
+			    		$data_array[] = array(
+				       'MSSV'  		  => $dt->mssv,
+				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
+				       'Lớp'    	  => $dt->tenlop,
+				       'Điểm học tập'    	  => $dt->diemht,
+				       'Điểm rèn luyện'    	  => $dt->drl,
+				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
+				       
+			      	);
+			    	}
+	        		$sheet->fromArray($data_array,null,'A1',false,false);
+	        	});
+        	
+        	}
+        	
+        	
+        })->export('xlsx');
+    }
+    public function getKhoa($id)
+    {
+    	return Khoa::where('id',$id)->first();
+    }
+
+    public function getDsLop($id)
+    {
+    	return Lop::join('nganh','nganh.id','=','lop.nganh_id')
+        ->join('bomon','bomon.id','=','nganh.idbomon')
+        ->join('khoa','khoa.id','=','bomon.idkhoa')
+         ->where('khoa.id','=',$id)->orderBy('lop.tenlop')
+         ->select('nganh.*','bomon.*','khoa.*','lop.*','lop.id as lopid')
+         ->get();
     }
 }

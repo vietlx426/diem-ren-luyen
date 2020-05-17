@@ -55,7 +55,7 @@ class CoVanHocTapController extends Controller
       ->where('hocky_namhoc.idtrangthaihocky',2)
       ->where('hocbong_thongbao.status','=',1)
        ->where('lop.id','=',$CVHT->lop_id)
-       ->select('*','hocbong_thongbao.id as idthongbao')->get();
+       ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->get();
 
       
 
