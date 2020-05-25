@@ -18,7 +18,10 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
     Route::post('/create','HocBongController@store');
     Route::get('/update/{id}','HocBongController@edit')->name('hocbong.edit');
   	Route::post('/update/{id}','HocBongController@update');
+
   	Route::get('/tim-kiem','TimKiemSinhVienController@StudentSearch')->name('hocbong.timkiem.sinhvien');
+  	Route::get('tim-kiem/lop/{idhb?}', 'TimKiemSinhVienController@getLopByKhoa')->name('admin_get_lopbykhoa');
+
   	Route::get('/delete/{id}','HocBongController@destroy')->name('hocbong.delete');
 	});
 	
@@ -61,19 +64,20 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	Route::post('/sua-van-ban','ThongBaoController@postSuaVanBan')->name('vanban.update');
 	Route::get('/xoa-van-ban/{id}','ThongBaoController@XoaVanBan')->name('vanban.delete');
 	//Export PDF
-	Route::get('export/{idnamhoc}', 'HocBongController@hocbong_export') ->name('admin_hocbong_export');
-	Route::get('export2/{idhocky}', 'HocBongController@hocbong_export_hknh') ->name('admin_hocbong_export_hknh');
+	Route::get('export-pdf-1/{idnamhoc}/{idlop}', 'HocBongController@hocbong_export') ->name('admin_hocbong_export');
+	Route::get('export-pdf-2/{idhocky}/{idlop}', 'HocBongController@hocbong_export_hknh') ->name('admin_hocbong_export_hknh');
 	//
 
 	//Excel
-	Route::get('xuatexcel/{id}', 'ExportController@xuatExcel')->name('xuatexcel');
+	Route::get('xuatexcel-toantruong-namhoc/{id}', 'ExportController@xuatExcel')->name('xuatexcel.namhoc');
+	Route::get('xuatexcel-toantruong-hocky/{id}', 'ExportController@xuatExcelByHocKy')->name('xuatexcel.hocky');
 	Route::get('xuatexcel-theokhoa-namhoc/{id}/{idnamhoc}', 'ExportController@xuatExcelByKhoaByNamhoc')->name('xuatexcel.theokhoa');
 	Route::get('xuatexcel-theokhoa-hocky/{id}/{idhk}', 'ExportController@xuatExcelByKhoaByHocKy')->name('xuatexcel.theokhoa.hocky');
 
 	//
 	Route::post('traohocbong', 'TraoHocBongController@TraoHB')->name('admin.traoHB');
 
-
+	
 	Route::get('namhoc/hknh/{idnamhoc?}', 'HocBongController@GetHKNHByNH')->name('admin_get_hknhbyhk');
 
 

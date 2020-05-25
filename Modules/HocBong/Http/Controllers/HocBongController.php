@@ -17,6 +17,8 @@ use App\NamHoc;
 use App\LichSuHocBong;
 use App\ThongBaoHocBong;
 use App\ThongBaoVanBan;
+use App\Lop;
+
 use PDF;
 use Auth;
 use Carbon\Carbon;
@@ -582,42 +584,26 @@ class HocBongController extends Controller
   
 
    
-   public function hocbong_export(Request $Request,$id){
-        $namhoc = NamHoc::find($id);
-        $ds_khoa=$this->getKhoa();
-        $sl_sv=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
-                ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-                ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-               ->where('hocky_namhoc.idnamhoc','=',$id)
-                ->join('lop','lop.id','=','sinhvien.lop_id')
-                ->join('nganh','nganh.id','=','lop.nganh_id')
-                ->join('bomon','bomon.id','=','nganh.idbomon')
-                ->join('khoa','khoa.id','=','bomon.idkhoa')
-                 ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
-                ->get();
-        $sl_hb=HocBongKhoa::join('hocbong','hocbong.id','=','hocbong_phamvi.id_hocbong')
-            ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-             ->where('hocky_namhoc.idnamhoc','=',$id)
-            ->join('khoa','khoa.id','=','hocbong_phamvi.id_khoa')
-             ->select('hocbong.*','hocbong_phamvi.*','khoa.*','khoa.id as idkhoa')
-            ->get(); 
-        $soluong_hb=HocBong::join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-        ->where('hocky_namhoc.idnamhoc','=',$id)->get();
-
-        $sl_HBdatrao=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+   public function hocbong_export($idnamhoc,$idlop){
+        $tenlop=Lop::where('id',$idlop)->first();
+        $getTenNH=NamHoc::where('id',$idnamhoc)->first();
+         $soluong_hb=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+         ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->where('lop.id','=',$idlop)
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-        ->where('hocky_namhoc.idnamhoc','=',$id)->get();
-        
-        $dsHocBong = HocBong::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
-       ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-       -> groupBy('hocbong_phamvi.id_hocbong')
-       ->select('hocbong.*','hocbong.id as idhb','hocky_namhoc.*')->orderBy('hocky_namhoc.id','desc')
-       ->where('hocky_namhoc.idnamhoc','=',$id)->get();
-       $toantruong=HocBong::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
+        ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
         ->get();
-        $hocbong_phamvi=HocBongKhoa::all();
 
-        $pdf = PDF::loadView('hocbong::export.hocbong_export', ['dsHocBong'=>$dsHocBong, 'namhoc'=>$namhoc,'toantruong'=>$toantruong,'hocbong_phamvi'=>$hocbong_phamvi,'soluong_hb'=>$soluong_hb,'sl_HBdatrao'=>$sl_HBdatrao,'ds_khoa'=>$ds_khoa,'sl_sv'=>$sl_sv,'sl_hb'=>$sl_hb], [], [
+        $dssvByNamHoc=SinhVien::where('lop_id',$idlop)
+        ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+
+        ->groupBy('sinhvien.id')
+        ->get();
+        $dshb=LichSuHocBong::all();
+
+        $pdf = PDF::loadView('hocbong::export.hocbong_export', ['tenlop'=>$tenlop, 'getTenNH'=>$getTenNH,'soluong_hb'=>$soluong_hb,'dssvByNamHoc'=>$dssvByNamHoc,'dshb'=>$dshb], [], [
             'mode'              => 'utf-8',
             'format'           => 'A4',
             'author'           => 'Author',
@@ -628,28 +614,29 @@ class HocBongController extends Controller
             'margin_bottom'     => '10.0'
         ]);
         
-        return $pdf->download('ThongKe_HocBong' .$namhoc->tennamhoc . '.pdf');
+        return $pdf->download('ThongKe_HocBong' .$getTenNH->tennamhoc . '.pdf');
    }
-   public function hocbong_export_hknh(Request $request,$id){
-        $hknh = HocKyNamHoc::find($id);
-         $soluong_hb=HocBong::join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-        ->where('hocky_namhoc.id','=',$id)->get();
-
-        $sl_HBdatrao=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+   public function hocbong_export_hknh($idhocky,$idlop){
+        $tenlop=Lop::where('id',$idlop)->first();
+        $getTenHKNH=HocKyNamHoc::where('id',$idhocky)->first();
+         $soluong_hb=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+         ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->where('lop.id','=',$idlop)
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-        ->where('hocky_namhoc.id','=',$id)->get();
-        
-        
-        $dsHocBong = HocBong::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
-       ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-       -> groupBy('hocbong_phamvi.id_hocbong')
-       ->select('hocbong.*','hocbong.id as idhb','hocky_namhoc.*')->orderBy('hocky_namhoc.id','desc')
-       ->where('hocky_namhoc.id','=',$id)->get();
-       $toantruong=HocBong::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
+        ->where('hocky_namhoc.id','=',$idhocky)
         ->get();
-        $hocbong_phamvi=HocBongKhoa::all();
+        $dssvByHocKy=SinhVien::where('lop_id',$idlop)
+        ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+        ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+        ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as drl')
+        ->groupBy('sinhvien.id')
+        ->get();
+        $dshb=LichSuHocBong::all();
 
-        $pdf = PDF::loadView('hocbong::export.hocbong_export', ['dsHocBong'=>$dsHocBong, 'hknh'=>$hknh,'toantruong'=>$toantruong,'hocbong_phamvi'=>$hocbong_phamvi,'soluong_hb'=>$soluong_hb,'sl_HBdatrao'=>$sl_HBdatrao], [], [
+        $pdf = PDF::loadView('hocbong::export.hocbong_export', ['tenlop'=>$tenlop, 'getTenHKNH'=>$getTenHKNH,'soluong_hb'=>$soluong_hb,'dssvByHocKy'=>$dssvByHocKy,'dshb'=>$dshb], [], [
             'mode'              => 'utf-8',
             'format'           => 'A4',
             'author'           => 'Author',
@@ -660,7 +647,7 @@ class HocBongController extends Controller
             'margin_bottom'     => '10.0'
         ]);
         
-        return $pdf->download('ThongKe_HocBong' .$hknh->tenhockynamhoc . '.pdf');
+        return $pdf->download('ThongKe_HocBong' .$getTenHKNH->tenhockynamhoc . '.pdf');
    }
    public function dashboard($idHocKyHienChon = '')
    {
@@ -702,11 +689,10 @@ class HocBongController extends Controller
          ];
         return view('hocbong::admin.dashboard',$viewData)->with('gender', json_encode($array));
    }
-   public function GetHKNHByNH($idnamhoc = '')
-        {
+   public function GetHKNHByNH($idnamhoc = ''){
             $dsHKNH = HocKyNamHoc::where('idnamhoc', '=', $idnamhoc)->get();
             return $dsHKNH;
-        }
+    }
 
    
 }

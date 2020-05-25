@@ -20,6 +20,17 @@
           <h2> <i class="fa fa-user-secret"></i>Thống kê học bổng của Lớp {{$tenlop->tenlop}}
             {{isset($getTenNH) ?  'Năm học '.$getTenNH->tennamhoc : $getTenHKNH->tenhockynamhoc}}
        </h2>
+       <div class="pull-right">
+        @if(isset($getTenNH))
+          <a href="{{route('admin_hocbong_export',[$getTenNH->id,$tenlop->id])}}" class="btn btn-success student_import">
+            <strong><i class="fa fa-download"></i> EXPORT PDF</strong>
+          </a>
+          @else
+          <a href="{{route('admin_hocbong_export_hknh',[$getTenHKNH->id,$tenlop->id])}}" class="btn btn-success student_import">
+            <strong><i class="fa fa-download"></i> EXPORT PDF</strong>
+          </a>
+          @endif
+        </div>
         <div class="x_content">
         <div class="row">
           

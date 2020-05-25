@@ -46,6 +46,12 @@
                 <td>Mẫu import học bổng</td>
                 <td class="text-center"><a href="{{route('admin_import_template_download', ['id'=>4])}}" class="btn btn-success" title="Tải (Download)"><i class="fa fa-download"></i></a></td>
               </tr>
+              <tr>
+                <td class="text-center">4</td>
+                <td>Mẫu import danh sách sinh viên nhận học bổng</td>
+                <td class="text-center"><a href="{{route('admin_import_template_download', ['id'=>5])}}" class="btn btn-success" title="Tải (Download)"><i class="fa fa-download"></i></a></td>
+              </tr>
+
             </tbody>
           </table>
         </div>

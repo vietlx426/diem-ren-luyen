@@ -94,7 +94,7 @@
   <div class="row">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Danh mục quản lý <small>category/list</small></h2>
+        <h2>Danh mục <small>category/list</small></h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
@@ -102,17 +102,16 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
-        <div>
         <div class="row">
-          
+
           <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">
             <div class="row dash-box">
-              <a href="{{route('user')}}">
+              <a href="{{route('hocbong.index')}}">
                 <div class="row img">
                   <img src="{{URL::asset('images/icons/user.png')}}" alt="" style="width: 70%;">
                 </div>
                 <div class="row title">
-                 QUẢN LÝ HỌC BỔNG
+                 QUẢN LÝ - THỐNG KÊ
                 </div>
               </a>
             </div>
@@ -120,7 +119,7 @@
 
           <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">
             <div class="row dash-box">
-              <a href="{{route('admin_sinhvien_timkiem')}}">
+              <a href="{{route('hocbong.thongbao')}}">
                 <div class="row img">
                   <img src="{{URL::asset('images/icons/graduates.png')}}" alt="" style="width: 70%;">
                 </div>
@@ -133,7 +132,7 @@
 
           <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 col-xl-1">
             <div class="row dash-box">
-              <a href="{{route('admin_canbogiangvien')}}">
+              <a href="{{route('hocbong.timkiem.sinhvien')}}">
                 <div class="row img">
                   <img src="{{URL::asset('images/icons/teacher.png')}}" alt="" style="width: 70%;">
                 </div>
@@ -143,10 +142,6 @@
               </a>
             </div>
           </div>
-
-         
-
-          
 
         </div>
       </div>

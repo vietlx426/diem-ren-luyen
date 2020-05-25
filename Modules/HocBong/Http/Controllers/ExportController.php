@@ -10,7 +10,7 @@ use App\NamHoc;
 use App\Lop;
 use App\Khoa;
 use App\HocKyNamHoc;
-
+use Carbon\Carbon;
 use Modules\HocBong\Entities\HocBongExport;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,6 +27,55 @@ class ExportController extends Controller
         
         $title=NamHoc::where('id',$id)->first();
          Excel::create('Thống kê học bổng năm học '.$title->tennamhoc, function($excel) use($HocBong) {
+
+         	foreach ($HocBong as $key => $hb) 
+         	{
+         		
+         		
+
+
+	        	$excel->setTitle('Danh sách sinh viên nhận học bổng');
+	        	$excel->sheet($hb->tenhb,function($sheet) use($hb) {
+
+	         		$data= DB::table('lichsu_hocbong')
+	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+	         		->join('lop','lop.id','=','sinhvien.lop_id')
+	         		->where('lichsu_hocbong.id_hocbong',$hb->idhb)
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->groupBy('sinhvien.id')
+	         		->get()
+	         		->toArray();
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
+			    	foreach ($data as  $dt) 
+			    	{
+			    		$data_array[] = array(
+				       'MSSV'  		  => $dt->mssv,
+				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
+				       'Lớp'    	  => $dt->tenlop,
+				       'Điểm học tập'    	  => $dt->diemht,
+				       'Điểm rèn luyện'    	  => $dt->drl,
+				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
+				       
+			      	);
+			    	}
+	        		$sheet->fromArray($data_array,null,'A1',false,false);
+	        	});
+        	
+        	}
+        	
+        	
+        })->export('xlsx');
+    }
+    public function xuatExcelByHocKy($id, Request $request)
+    {
+    	
+    	$HocBong=HocBong::join('hocky_namhoc','hocky_namhoc.id','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.id',$id)->select('tenhb','hocbong.id as idhb')->get();
+        
+        $title=HocKyNamHoc::where('id',$id)->first();
+         Excel::create('Thống kê học bổng '.$title->tenhockynamhoc, function($excel) use($HocBong) {
 
          	foreach ($HocBong as $key => $hb) 
          	{

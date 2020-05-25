@@ -17,7 +17,13 @@
     <div class="row">
     <div class="x_panel">
       <div class="x_title">
-        <h2> <i class="fa fa-user-secret"></i> Trao học bổng cho sinh viên {{$hocKyNamHoc_HienChon?$hocKyNamHoc_HienChon->tenhockynamhoc:''}}</h2>
+        <h2> <i class="fa fa-user-secret"></i>
+          @if(isset($getTenHB))
+          Trao {{$getTenHB->tenhb}} cho sinh viên {{$hocKyNamHoc_HienChon?$hocKyNamHoc_HienChon->tenhockynamhoc:''}}
+          @else
+          Trao học bổng cho sinh viên {{$hocKyNamHoc_HienChon?$hocKyNamHoc_HienChon->tenhockynamhoc:''}}
+          @endif
+          </h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
@@ -34,7 +40,8 @@
       <form>
         <div class="x_content">
         <div class="row">
-           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+           
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                  <h4 class="text-center"><label for=""> Học bổng </label></h4>
               <div class="well" style="max-height: 150px; overflow: auto;">
                   <label class="control-label">Học bổng</label>
@@ -46,7 +53,19 @@
               </select>
               </div>
             </div>
-          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                 <h4 class="text-center"><label for=""> Lớp </label></h4>
+              <div class="well" style="max-height: 150px; overflow: auto;">
+                  <label class="control-label">Học bổng</label>
+              <select name="lop" id="lop" class="form-control">
+                <option value="">--- Tất cả ---</option>
+                @foreach($dsLop as $lop)
+                      <option value="{{$lop->id}}" {{\Request::get('lop')==$lop->id ? "selected='selected'" : ""}}>{{$lop->tenlop}}</option>
+                    @endforeach
+              </select>
+              </div>
+            </div>
+          <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="text-center"><label for=""> ĐIỂM HỌC TẬP </label></h4>
                 <div class="well" style="max-height: 150px; overflow: auto;">
                   <div class="row form-group">
@@ -77,8 +96,10 @@
                   
                   <br>
                 </div>
+
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                 <h4 class="text-center"><label for=""> ĐIỂM RÈN LUYỆN </label></h4>
                 <div class="well" style="max-height: 150px;overflow: auto;">
                   <div class="row form-group">
@@ -364,6 +385,21 @@
           
       });
        </script>
+
+       <script>
+      var url_route_get_lopbykhoa = "{{route('admin_get_lopbykhoa')}}";
+      $('#hocbong').change(function(e){
+      var idhb = $('#hocbong').val();
+      var url = url_route_get_lopbykhoa + "/" + idhb;
+      var data = callAjax(url, "GET");
+      $('#lop').html("");
+      var opt = '<option value="">--- Tất cả ---</option>';
+      $.each(data, function(key, value){
+        opt += '<option value="' + value.id + '">' + value.tenlop + '</option>';
+      })
+      $('#lop').html(opt);
+    });
+    </script>
   
 
 

@@ -110,10 +110,28 @@
           <button class="btn btn-primary student_filter">
             <i class="fa fa-search"></i> <strong> TÌM KIẾM/LỌC </strong>
           </button>
-          <a href="{{route('xuatexcel',$getNamHoc->id)}}" class="btn btn-success btn_export_bangdiem_bcs btn-download">
+          
+          <?php
+          if(isset($getHKNH)){
+        ?>
+          <a href="{{route('xuatexcel.hocky',$getHKNH->id)}}" class="btn btn-success btn_export_bangdiem_bcs btn-download">
               <i class="fa fa-download"> </i>
               <strong> TẢI THỐNG KÊ</strong>
-            </a>  
+            </a> 
+                                                      
+        <?php                       
+        }
+        else{
+        ?>
+        
+
+        <a href="{{route('xuatexcel.namhoc',$getNamHoc->id)}}" class="btn btn-success btn_export_bangdiem_bcs btn-download">
+              <i class="fa fa-download"> </i>
+              <strong> TẢI THỐNG KÊ</strong>
+            </a>       
+        <?php 
+        }
+        ?>
 
           
             

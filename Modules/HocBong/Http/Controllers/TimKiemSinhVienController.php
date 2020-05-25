@@ -14,7 +14,10 @@ use App\Scholarship;
 use App\LichSuHocBong;
 use App\BangDiemRenLuyen;
 use App\HocBongKhoa;
-
+use App\Lop;
+use App\Nganh;
+use App\BoMon;
+use App\NamHoc;
 use DB;
 class TimKiemSinhVienController extends Controller
 {
@@ -29,18 +32,20 @@ class TimKiemSinhVienController extends Controller
         ->where('hknh1.idtrangthaihocky','=',2)->where('hknh2.idtrangthaihocky','=',2)
         ->select('sinhvien.*','bangdiemhoctap.*','bangdiemrenluyen.sinhvien_diem as drl','sinhvien.id as idsv')
         ;
-    
-        
         //DHT
          if($Request->hocbong)
-         {
+         {  
+            if($Request->lop)
+            {
+                $students->where('lop_id',$Request->lop);
+            }
             
             if($Request->hoctapdieukien1)
             $students->where('bangdiemhoctap.diem', $Request->hoctapdieukien1, $Request->hoctapdieukien1value);
-        if($Request->hoctapdieukien1 && $Request->hoctapdieukien2)
+            if($Request->hoctapdieukien1 && $Request->hoctapdieukien2)
             $students->where('bangdiemhoctap.diem', $Request->hoctapdieukien2, $Request->hoctapdieukien2value);
         
-         if(!$Request->hoctapdieukien1 && $Request->hoctapdieukien2)
+            if(!$Request->hoctapdieukien1 && $Request->hoctapdieukien2)
              $students->where('bangdiemhoctap.diem', $Request->hoctapdieukien2, $Request->hoctapdieukien2value);
         
          
@@ -95,13 +100,17 @@ class TimKiemSinhVienController extends Controller
             $hocKyNamHoc_HienChon = $HocKyNamHoc_HienTai;
         else
             $hocKyNamHoc_HienChon = HocKyNamHoc::find($idHocKyHienChon);
-
+        $dsLop = Lop::all();
+        $dsnamhoc=NamHoc::all();
+       
         $viewData=[
             'students'=>$students,
             'ds_khoa'=>$ds_khoa,
             'getTenHB'=>$getTenHB,
             'scholar_history'=>$scholar_history,
             'ds_hocbong'=>$ds_hocbong,
+            'dsLop'=>$dsLop,
+            
             'hocKyNamHoc_HienChon'=>$hocKyNamHoc_HienChon
         ]; 
 
@@ -137,6 +146,17 @@ class TimKiemSinhVienController extends Controller
     }
     public function category(){
         return $this->belongsTo(Scholarship::class,'id_hocbong');
+    }
+    public function getLopByKhoa($idhb = ''){
+        $getIDKhoa=HocBongKhoa::where('id_hocbong',$idhb)->pluck('id_khoa');
+        // $dsLop = Lop::join('nganh','nganh.id','=','lop.nganh_id')
+        // ->join('bomon','bomon.id','=','nganh.idbomon')
+        // ->join('khoa','khoa.id','=','bomon.idkhoa')
+        // ->whereIn('khoa.id',$getIDKhoa)->get();
+        $dsLop = Lop::join('nganh','nganh.id','=','lop.nganh_id')
+        ->join('bomon','bomon.id','=','nganh.idbomon')
+        ->whereIn('bomon.idkhoa',$getIDKhoa)->get();
+        return $dsLop;
     }
 
     
