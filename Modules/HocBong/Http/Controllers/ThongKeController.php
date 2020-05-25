@@ -182,7 +182,7 @@ class ThongKeController extends Controller
         ->groupBy('sinhvien.id')
         ->get();
         $dshb=LichSuHocBong::all();
-
+        $a=1;
         
 
 
