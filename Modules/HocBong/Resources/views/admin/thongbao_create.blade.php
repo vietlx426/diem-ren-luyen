@@ -120,7 +120,7 @@
                 <div class="form-group">
                 <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 ">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">File văn bản<span class="required"></span></label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">File văn bản <span class="required"></span></label>
 
                         <div class="col-md-9 col-sm-9 col-xs-12">
                             <div class="btn-group">
@@ -215,8 +215,6 @@
       };
       finder.popup();
     }
-    $('.add').click(function() {
-    $('.optionBox').append('<input type="text" /><span class="remove">Remove Option</span>');
-});
+    
   </script>
 @endsection

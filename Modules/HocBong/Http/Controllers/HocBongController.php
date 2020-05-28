@@ -555,8 +555,8 @@ class HocBongController extends Controller
 
     $ds_sv=SinhVien::join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
     ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-    ->join('bangdiemhoctap','bangdiemhoctap.hockynamhoc_id','=','hocbong.idhockynamhoc')
-    ->join('bangdiemrenluyen','bangdiemrenluyen.hocky_namhoc_id','=','hocbong.idhockynamhoc')
+    ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+        ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
     ->where('hocbong.id','=',$id)
     ->groupBy('sinhvien.id')
     ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as diemrenluyen')

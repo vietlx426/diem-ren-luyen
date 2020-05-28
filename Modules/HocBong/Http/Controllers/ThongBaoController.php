@@ -14,8 +14,11 @@ use App\HocKyNamHoc;
 use App\Scholarship;
 use App\LichSuHocBong;
 use App\BangDiemRenLuyen;
+use App\HocBong;
 use Modules\HocBong\Http\Requests\ThongBaoRequest;
 use Modules\HocBong\Http\Requests\VanBanRequest;
+use Modules\HocBong\Entities\HoSoHocBong;
+use Modules\HocBong\Entities\FileHoSoHocBong;
 use DB;
 use Carbon\Carbon;
 use Auth;
@@ -170,7 +173,7 @@ class ThongBaoController extends Controller
         ];
         return view('hocbong::admin.vanban_index',$viewData);
     }
-    public function postThemVanBan(VanBanRequest $request){
+    public function postThemVanBan(Request $request){
         try {
             $vanban = new ThongBaoVanBan;
             $vanban->id_thongbao=$request->MaThongBao;
@@ -201,6 +204,35 @@ class ThongBaoController extends Controller
     public function XoaVanBan($id)
     {
         DB::table('hocbong_thongbao_vanban')->where('id', '=', $id)->delete();
+        return redirect()->back();
+    }
+    public function getDSHoSo(){
+        $dsHoSo=HoSoHocBong::all();
+        $fileHoSo=FileHoSoHocBong::all();
+        $dshocky = HocKyNamHoc::all();
+
+        $viewData=[
+            'dsHoSo' => $dsHoSo,
+            'fileHoSo' => $fileHoSo,
+            'dshocky' => $dshocky,
+        ];
+        return view('hocbong::admin.hoso_index',$viewData);
+    }
+    public function getFile($id, Request $request){
+        $file=FileHoSoHocBong::where('id',$id)->first();
+        $root= "/diem-ren-luyen/Modules/HocBong/uploads/hoso/";
+        $getHocBong = HocBong::where('id',$file->hoso_hocbong->id_hocbong)->first();
+        $tenhocky = $getHocBong->HocKyNamHoc->tenhockynamhoc;
+        $mahb = $getHocBong->mahb;
+        
+        $mssv = SinhVien::find($file->hoso_hocbong->id_sinhvien);
+    
+        $folder_file = $tenhocky.'/'.$mahb.'/'.$mssv->mssv.'/';
+        $path=config('app.url').$root.$folder_file.$file->url;
+        return redirect($path);
+    }
+    public function checkedHoSo($id){
+        DB::table('hocbong_hoso')->where('id',$id)->update(['status'=>1]);
         return redirect()->back();
     }
 }

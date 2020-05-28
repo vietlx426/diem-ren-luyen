@@ -66,7 +66,7 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$baseUrl = '/diemrenluyen/images/upload/';
+$baseUrl = '/diem-ren-luyen/images/upload/';
 // $baseUrl = '/public/js/ckfinder/userfiles/';
 
 

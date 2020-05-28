@@ -8,8 +8,8 @@ class ThongBaoHocBong extends Model
 {
     protected $table = 'hocbong_thongbao';
     
-    public function vanban()
-    {
-    	return $this->hasMany('App\ThongBaoVanBan');
-    }
+public function vanban()
+{
+    return $this->hasMany('App\ThongBaoVanBan');
+}
 }

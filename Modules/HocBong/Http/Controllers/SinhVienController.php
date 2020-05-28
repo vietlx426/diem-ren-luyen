@@ -18,12 +18,25 @@ use App\Khoa;
 use App\SinhVien;
 use App\GiaoVuKhoa;
 use App\Lop;
+use App\HocBong;
+use Carbon\Carbon;
+use Modules\HocBong\Entities\HoSoHocBong;
+use Modules\HocBong\Entities\FileHoSoHocBong;
+use Redirect;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Validator;
+
+
 use App\NamHoc;
 use DB;
 use Storage;
 
 class SinhVienController extends Controller
+
 {
+  use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     public function sinhvien_index_hocbong(){
       $idSV=Auth::user()->cbgvsv_id;
       $dsHKNH = HocKyNamHocController::DanhSachHocKyNamHocCuaSinhVien($idSV);
@@ -41,7 +54,8 @@ class SinhVienController extends Controller
       ->where('hocky_namhoc.idtrangthaihocky',2)
       ->where('hocbong_thongbao.status','=',1)
        ->where('lop.id','=',$idLop->lop_id)
-       ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->get();
+       
+       ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->orderBy('hocbong_thongbao.id','desc')->get();
 
       $viewData=[
         'dsHKNH'=>$dsHKNH,
@@ -68,15 +82,70 @@ class SinhVienController extends Controller
     }
     public function sinhvien_thongbao($id){
       $ThongBao=ThongBaoHocBong::where('hocbong_thongbao.id','=',$id)->first();
-      $DinhKem=ThongBaoVanBan::where('hocbong_thongbao_vanban.id_thongbao','=',$id)->get();
+      $FileDinhKem=ThongBaoVanBan::where('hocbong_thongbao_vanban.id_thongbao','=',$id)->get();
       $author=DB::table('users')->where("id",$ThongBao->author)->first();
       $viewData=[
+
          'ThongBao'=>$ThongBao,
         'author'=>$author,
-      'DinhKem'=>$DinhKem,
+      'FileDinhKem'=>$FileDinhKem,
 
       ];
       return view('hocbong::sinhvien.thongbao',$viewData);
+    }
+    public function postNopHS(Request $request){
+      $input_data = $request->all();
+
+      $this->validate($request, [
+        'DinhKem'  => 'required|mimes:pdf'
+       ]);
+
+
+
+      
+         
+        
+      // }
+      // $idSV=Auth::user()->cbgvsv_id;
+      // $sinhvien = SinhVien::where('id',$idSV)->first();
+      // $getHocBong = HocBong::where('id',$request->MaHocBong)->first();
+      // try {
+      //   $hoso = new HoSoHocBong();
+      //   $hoso->id_hocbong=$request->MaHocBong; 
+      //   $hoso->id_sinhvien=$idSV;
+      //   $hoso->status=0;
+      //   $hoso->created_at=Carbon::now();
+      //   $hoso->save();
+      //   $index = 0;
+       
+      //   foreach ($request->DinhKem as $key => $url) {
+      //          if($url !== null)
+      //          {
+            
+
+      //           $file = new FileHoSoHocBong;
+      //           $file->id_hoso=$hoso->id;
+      //           $get_name_file = $url->getClientOriginalName();
+      //           $mssv = $sinhvien->mssv;
+      //           $name_file = current(explode('.',$get_name_file));
+      //           $new_file =  $name_file.' '.$mssv.'.'.$url->getClientOriginalExtension();
+      //           $name_new_file = str_replace(' ', '%20', $new_file);
+      //           $file->url = $name_new_file;
+      //           $tenhocky = $getHocBong->HocKyNamHoc->tenhockynamhoc;
+      //           $root = 'Modules/HocBong/uploads/hoso/';
+      //           $folder_upload = $root.'/'.$tenhocky.'/'.$getHocBong->mahb.'/'.$sinhvien->mssv;
+      //           $url->move($folder_upload,$new_file);
+      //           $file->save();
+      //           $index++;
+      //          }
+      //   }
+        
+        
+        
+      //   return redirect()->back()->with('success', "Nộp hồ sơ thành công!");
+      //   } catch (Exception $e) {
+      //       return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+      //   }
     }
 
     public function sinhvien_download($id){
@@ -85,4 +154,5 @@ class SinhVienController extends Controller
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
     }
+
 }

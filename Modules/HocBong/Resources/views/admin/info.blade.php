@@ -105,9 +105,8 @@
               <tbody>
                 @if(isset($khoa))
                 @foreach($khoa as $data)
-                 <?php $STT = 0; ?>
                 <tr>
-                  <th>{{++$STT}}</th>
+                  <th>{{ $loop->iteration }}</th>
                   <td>{{$data->tenkhoa->tenkhoa}}</td>
                   <td>{{ count($sl_HBdatrao->where("idk", $data->id_khoa)) }}</td>
                   

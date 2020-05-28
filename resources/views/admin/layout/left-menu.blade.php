@@ -68,6 +68,7 @@
                     <li><a href="{{route('hocbong.index')}}">QUẢN LÝ - THỐNG KÊ</a></li>
                     <li><a href="{{route('hocbong.thongbao')}}">Thông báo</a></li>
                     <li><a href="{{route('hocbong.timkiem.sinhvien')}}">Trao học bổng</a></li>
+                    <li><a href="{{route('danhsach.hoso')}}">Danh sách hồ sơ</a></li>
                     
                 </ul>
             </li>

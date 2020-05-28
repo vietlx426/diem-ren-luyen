@@ -21,35 +21,37 @@
             <h4>THÔNG BÁO HỌC BỔNG</h4>
            
           </div>
-       <table id="tbl_sinhvien" class="table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th class="text-right"></th>
-              
-            </tr>
-          </thead>
-          <tbody>
-           @isset($dsThongBao)
-           @foreach($dsThongBao as $data)
-              <tr>
-                <td class="">
-                  <a href="{{route('sinhvien.thongbao.hocbong',[$data->idthongbao,$data->slug])}}">
-                  <div class="weekly-item" style="display: flex;">
-                      <div class="number"><i class="fa fa-newspaper-o" style="color: red; font-size: 20px"></i></div>
-                      <div class="info" style="flex-grow: 1;">
-                          <div class="singer">
-                            {{$data->tieude}}
-                          </div>
-                      </div>
-                      <div class="view-count">{{ date('d-m-yy', strtotime($data->ngaytao)) }}</div>
-                  </div>
-                  </a> 
-                </td>               
-              </tr>
-            @endforeach
-            @endif
-          </tbody>
-        </table>
+       
+        <table id="tbl_thongbao" class="table table-striped table-bordered" width="100%">
+                                  <thead>
+                                  <tr class="filters">
+                                    <th >Thông báo</th>                                   
+                                    
+                                    
+                                  </tr>
+                              </thead> 
+                              <tbody>
+                              @isset($dsThongBao)
+                              @foreach($dsThongBao as $data)
+                                  <tr>
+                                    <td class="">
+                                      <a href="{{route('sinhvien.thongbao.hocbong',[$data->idthongbao,$data->slug])}}">
+                                      <div class="weekly-item" style="display: flex;">
+                                          <div class="number"><i class="fa fa-newspaper-o" style="color: red; font-size: 20px"></i></div>
+                                          <div class="info" style="flex-grow: 1;">
+                                              <div class="singer">
+                                                {{$data->tieude}}
+                                              </div>
+                                          </div>
+                                          <div class="view-count">{{ date('d-m-yy', strtotime($data->ngaytao)) }}</div>
+                                      </div>
+                                      </a> 
+                                    </td>               
+                                  </tr>
+                                @endforeach
+                                @endif
+                              </tbody>
+                          </table>
  
       </div>
         <div class="x_content">
@@ -119,6 +121,6 @@
     <script src="{{URL::asset('gentelella-master/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
   <script type="text/javascript">
 
-      $('#tbl_sinhvien').dataTable();
+      $('#tbl_thongbao').dataTable();
     </script>
 @endsection

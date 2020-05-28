@@ -167,7 +167,7 @@
                                   <th width="10%">Tên học bổng</th>
                                   <th width="10%">Đơn vị tài trợ</th>
                                   <th width="10%">Phạm vi</th>
-                                  <th width="15%">Học kỳ, năm học</th>
+                                   <th width="15%">Học kỳ, năm học</th>
                                   <th width="10%">Giá trị học bổng</th>
                                   <th width="5%">Số lượng</th>
                                   <th width="5%">Số lượng đã trao</th>

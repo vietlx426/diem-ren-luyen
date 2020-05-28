@@ -80,6 +80,12 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	
 	Route::get('namhoc/hknh/{idnamhoc?}', 'HocBongController@GetHKNHByNH')->name('admin_get_hknhbyhk');
 
+	Route::get('ho-so', 'ThongBaoController@getDSHoSo')->name('danhsach.hoso');
+	Route::get('file-ho-so/{id}', 'ThongBaoController@getFile')->name('download.file.hoso');
+	Route::get('/hoso-checked/{id}','ThongBaoController@checkedHoSo')->name('hoso.checked');
+	Route::get('/bat-thong-bao/{id}','ThongBaoController@onThongBao')->name('thongbao.on');
+	
+
 
 
 });
@@ -91,6 +97,7 @@ Route::middleware('sinhvien')->prefix('sinhvien')->group(function(){
 			Route::get('thongbao-hocbong/{id}','SinhVienController@sinhvien_thongbao')->name('sinhvien.thongbao.hocbong');
 			Route::get('chitiet-ketqua/{id}','SinhVienController@sinhvien_chitiet')->name('sinhvien.chitiet.ketqua');
 			Route::get('/download/{id}','SinhVienController@sinhvien_download')->name('sinhvien.download');
+			Route::post('/nop-hoso','SinhVienController@postNopHS')->name('hoso.store');
 		});
 		
 
