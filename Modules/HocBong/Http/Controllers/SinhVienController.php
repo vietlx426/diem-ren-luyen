@@ -40,9 +40,7 @@ class SinhVienController extends Controller
     public function sinhvien_index_hocbong(){
       $idSV=Auth::user()->cbgvsv_id;
       $dsHKNH = HocKyNamHocController::DanhSachHocKyNamHocCuaSinhVien($idSV);
-      $dsHocBong=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-      ->where('lichsu_hocbong.id_sinhvien','=',$idSV)->get();
+      $dsHoSo = HoSoHocBong::where('id_sinhvien',$idSV)->get();
       $idLop=SinhVien::find($idSV);
       $dsThongBao=ThongBaoHocBong::join('hocbong', 'hocbong.id', '=', 'hocbong_thongbao.id_hocbong')
       ->join('hocky_namhoc','hocky_namhoc.id','hocbong.idhockynamhoc')
@@ -58,8 +56,8 @@ class SinhVienController extends Controller
        ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->orderBy('hocbong_thongbao.id','desc')->get();
 
       $viewData=[
+        'dsHoSo'=>$dsHoSo,
         'dsHKNH'=>$dsHKNH,
-        'dsHocBong'=>$dsHocBong,
         'dsThongBao'=>$dsThongBao,
       ];
       return view('hocbong::sinhvien.index',$viewData);
@@ -96,56 +94,70 @@ class SinhVienController extends Controller
     public function postNopHS(Request $request){
       $input_data = $request->all();
 
-      $this->validate($request, [
-        'DinhKem'  => 'required|mimes:pdf'
-       ]);
+      $validator = Validator::make(
+        $input_data, [
+        'DinhKem.*' => 'required|mimes:doc,docx,pdf'
+        ],[
+            'DinhKem.*.required' => 'Vui lòng chọn file đính kèm',
+            'DinhKem.*.mimes' => 'Chỉ chấp nhận file pdf, doc, docx',
+        ]
+    );
+    if($request->DinhKem === null){
+      return redirect()->back()->with('message', 'Vui lòng chọn file đính kèm'); 
+    }
+    if ($validator->fails()) {
+      // dd($validator->errors()->first());
+      $message = $validator->errors()->first();
+      return redirect()->back()->with('message', $message);
+
+    }
 
 
 
       
          
         
-      // }
-      // $idSV=Auth::user()->cbgvsv_id;
-      // $sinhvien = SinhVien::where('id',$idSV)->first();
-      // $getHocBong = HocBong::where('id',$request->MaHocBong)->first();
-      // try {
-      //   $hoso = new HoSoHocBong();
-      //   $hoso->id_hocbong=$request->MaHocBong; 
-      //   $hoso->id_sinhvien=$idSV;
-      //   $hoso->status=0;
-      //   $hoso->created_at=Carbon::now();
-      //   $hoso->save();
-      //   $index = 0;
+      
+      $idSV=Auth::user()->cbgvsv_id;
+      $sinhvien = SinhVien::where('id',$idSV)->first();
+      $getHocBong = HocBong::where('id',$request->MaHocBong)->first();
+      try {
+        $hoso = new HoSoHocBong();
+        $hoso->id_hocbong=$request->MaHocBong; 
+        $hoso->id_sinhvien=$idSV;
+        $hoso->status=0;
+        $hoso->created_at=Carbon::now();
+        $hoso->save();
+        $index = 0;
        
-      //   foreach ($request->DinhKem as $key => $url) {
-      //          if($url !== null)
-      //          {
+        foreach ($request->DinhKem as $key => $url) {
+               if($url !== null)
+               {
             
 
-      //           $file = new FileHoSoHocBong;
-      //           $file->id_hoso=$hoso->id;
-      //           $get_name_file = $url->getClientOriginalName();
-      //           $mssv = $sinhvien->mssv;
-      //           $name_file = current(explode('.',$get_name_file));
-      //           $new_file =  $name_file.' '.$mssv.'.'.$url->getClientOriginalExtension();
-      //           $name_new_file = str_replace(' ', '%20', $new_file);
-      //           $file->url = $name_new_file;
-      //           $tenhocky = $getHocBong->HocKyNamHoc->tenhockynamhoc;
-      //           $root = 'Modules/HocBong/uploads/hoso/';
-      //           $folder_upload = $root.'/'.$tenhocky.'/'.$getHocBong->mahb.'/'.$sinhvien->mssv;
-      //           $url->move($folder_upload,$new_file);
-      //           $file->save();
-      //           $index++;
-      //          }
-      //   }
+                $file = new FileHoSoHocBong;
+                $file->id_hoso=$hoso->id;
+                $get_name_file = $url->getClientOriginalName();
+                $mssv = $sinhvien->mssv;
+                $name_file = current(explode('.',$get_name_file));
+                $new_file =  $name_file.' '.$mssv.'.'.$url->getClientOriginalExtension();
+                $name_new_file = str_replace(' ', '%20', $new_file);
+                $file->url = $name_new_file;
+                $tenhocky = $getHocBong->HocKyNamHoc->tenhockynamhoc;
+                $root = 'Modules/HocBong/uploads/hoso/';
+                $folder_upload = $root.'/'.$tenhocky.'/'.$getHocBong->mahb.'/'.$sinhvien->mssv;
+                $url->move($folder_upload,$new_file);
+                $file->save();
+                $index++;
+               }
+        }
         
         
         
-      //   return redirect()->back()->with('success', "Nộp hồ sơ thành công!");
-      //   } catch (Exception $e) {
-      //       return redirect()->back()->with('alert','Đã có lỗi xảy ra');
-      //   }
+        return redirect()->back()->with('success', "Nộp hồ sơ thành công!");
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
     }
 
     public function sinhvien_download($id){
@@ -153,6 +165,19 @@ class SinhVienController extends Controller
     
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
+    }
+    public function ketquahocbongall(){
+      $idSV=Auth::user()->cbgvsv_id;
+      $dsHKNH = HocKyNamHocController::DanhSachHocKyNamHocCuaSinhVien($idSV);
+
+      $dsHocBong=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+      ->where('lichsu_hocbong.id_sinhvien','=',$idSV)->get();
+      $viewData=[
+        'dsHKNH' => $dsHKNH,
+        'dsHocBong' => $dsHocBong,
+      ];
+      return view('hocbong::sinhvien.ketquahocbong_all',$viewData);
     }
 
 }

@@ -46,7 +46,7 @@
                                 </tr>
                             </thead> 
                             <tbody>
-                               @foreach($dsVanBan as $data)
+                               @foreach ($dsVanBan as $data)
                                <tr>
                                  <td>{{++$STT}}</td>
                                  <td>{{$data->tenfile}}</td>

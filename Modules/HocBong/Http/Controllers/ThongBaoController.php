@@ -231,8 +231,19 @@ class ThongBaoController extends Controller
         $path=config('app.url').$root.$folder_file.$file->url;
         return redirect($path);
     }
-    public function checkedHoSo($id){
-        DB::table('hocbong_hoso')->where('id',$id)->update(['status'=>1]);
+    
+    public function traoHBOnHoSo(Request $request){
+        try {
+            $statusHoso = HoSoHocBong::where('id',$request->IDHoSo)->update(['status' => 1]);
+            $traohb = new LichSuHocBong;
+            $traohb->id_hocbong=$request->IDHB;
+            $traohb->id_sinhvien=$request->IDSV;
+            $traohb->giatri=$request->GTHB;
+            $traohb->save();
+        
         return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
     }
 }

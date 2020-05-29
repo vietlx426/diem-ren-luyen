@@ -23,16 +23,11 @@
         </i> NỘP HỒ SƠ </strong>
         
       </button>
-      @if (count($errors) > 0)
+      @if(session()->has('message'))
     <div class="alert alert-danger">
-     Upload Validation Error<br><br>
-     <ul>
-      @foreach ($errors->all() as $error)
-       <li>{{ $error }}</li>
-      @endforeach
-     </ul>
+        {{ session()->get('message') }}
     </div>
-   @endif
+@endif
         </div>
         <div class="clearfix"></div>
       </div>
