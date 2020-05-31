@@ -47,8 +47,10 @@ class ThongKeController extends Controller
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
         ->where('khoa.id','=',$id)
+        ->groupBy('sinhvien.id')
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
+
 
      
 
@@ -65,6 +67,7 @@ class ThongKeController extends Controller
          ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
          ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
+        ->groupBy('sinhvien.id')
          ->get();
 
 
@@ -132,11 +135,12 @@ class ThongKeController extends Controller
         $tenlop=Lop::where('id',$id)->first();
         $getTenNH=NamHoc::where('id',$idnamhoc)->first();
          $soluong_hb=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
-         ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->join('lop','lop.id','=','sinhvien.lop_id')
         ->where('lop.id','=',$id)
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
+        ->groupBy('sinhvien.id')
         ->get();
 
         $dssvByNamHoc=SinhVien::where('lop_id',$id)
@@ -172,6 +176,7 @@ class ThongKeController extends Controller
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.id','=',$idhknh)
+        ->groupBy('sinhvien.id')
         ->get();
         $dssvByHocKy=SinhVien::where('lop_id',$id)
         ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')

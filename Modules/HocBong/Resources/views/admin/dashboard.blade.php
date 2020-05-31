@@ -76,7 +76,8 @@
       <div class="x_content">
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-            <div id="piechart" style="width: 100%; height: 500px;"></div>
+          <div id="columnchart_values" style="width: 100%; height: 500px;"></div>
+
           </div>
 
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
@@ -152,45 +153,61 @@
 @section('javascript')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ["", "Số lượng sinh viên", { role: "style" } ],
+        ["{{ \App\Khoa::where('id',1)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 1)) }}, "#DC3912"],
+        ["{{ \App\Khoa::where('id',2)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 2)) }}, "#268B07"],
+        ["{{ \App\Khoa::where('id',3)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 3)) }}, "#3366CC"],
+        ["{{ \App\Khoa::where('id',4)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 4)) }}, "#ffd700"],
+        ["{{ \App\Khoa::where('id',5)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 5)) }}, "#131A7C"],
+        ["{{ \App\Khoa::where('id',6)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 6)) }}, "#A4BDBA"],
+        ["{{ \App\Khoa::where('id',7)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 7)) }}, "#A748C3"],
+        ["{{ \App\Khoa::where('id',8)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 8)) }}, "#FF005D"],
+        ["{{ \App\Khoa::where('id',9)->first()->tenkhoa }}", {{ count($thong_ke_charts_column2->where("idk", 9)) }}, "#b87333"],
 
-      function drawChart() {
+        
+      ]);
 
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['{{ \App\Khoa::where('id',1)->first()->tenkhoa }}' ,     {{ count($thong_ke_charts->where("idkhoa", 1)) }}],
-          ['{{ \App\Khoa::where('id',2)->first()->tenkhoa }}',      {{ count($thong_ke_charts->where("idkhoa", 2)) }}],
-          ['{{ \App\Khoa::where('id',3)->first()->tenkhoa }}',  {{ count($thong_ke_charts->where("idkhoa", 3)) }}],
-          ['{{ \App\Khoa::where('id',4)->first()->tenkhoa }}', {{ count($thong_ke_charts->where("idkhoa", 4)) }}],
-          ['{{ \App\Khoa::where('id',5)->first()->tenkhoa }}',    {{ count($thong_ke_charts->where("idkhoa", 5)) }}],
-          ['{{ \App\Khoa::where('id',6)->first()->tenkhoa }}',    {{ count($thong_ke_charts->where("idkhoa", 6)) }}],
-          ['{{ \App\Khoa::where('id',7)->first()->tenkhoa }}',    {{ count($thong_ke_charts->where("idkhoa", 7)) }}],
-          ['{{ \App\Khoa::where('id',8)->first()->tenkhoa }}',    {{ count($thong_ke_charts->where("idkhoa", 8)) }}],
-          ['{{ \App\Khoa::where('id',9)->first()->tenkhoa }}',    {{ count($thong_ke_charts->where("idkhoa", 9)) }}]
-        ]);
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
 
-        var options = {
-          title: 'My Daily Activities'
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-        chart.draw(data, options);
-      }
-    </script>
+      var options = {
+        title: "Số lượng sinh viên nhận học bổng theo từng khoa",
+        width: 800,
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
+  }
+  </script>
     <script type="text/javascript">
-      var analytics = <?php echo $gender; ?>
-
+  
    google.charts.load('current', {'packages':['bar']});
 
    google.charts.setOnLoadCallback(drawChart);
 
    function drawChart()
    {
-    var data = google.visualization.arrayToDataTable(analytics);
+    var data = google.visualization.arrayToDataTable([
+        ["", "Số lượng sinh viên", { role: "style" } ],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-3)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-3))}}, "#3366CC"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-2))}}, "#3366CC"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-1)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-1))}}, "#3366CC"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2))}}, "#3366CC"],
+        
+      ]);
     var options = {
-     title : 'Danh sách sinh viên nhận học bổng theo từng năm'
+     title : 'Số lượng học bổng'
     };
     var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 

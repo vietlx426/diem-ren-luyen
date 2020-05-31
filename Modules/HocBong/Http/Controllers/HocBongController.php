@@ -129,6 +129,7 @@ class HocBongController extends Controller
             ->join('nganh','nganh.id','=','lop.nganh_id')
             ->join('bomon','bomon.id','=','nganh.idbomon')
             ->join('khoa','khoa.id','=','bomon.idkhoa')
+            ->groupBy('sinhvien.id')
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
             ->get();
             }
@@ -156,6 +157,7 @@ class HocBongController extends Controller
                 ->join('nganh','nganh.id','=','lop.nganh_id')
                 ->join('bomon','bomon.id','=','nganh.idbomon')
                 ->join('khoa','khoa.id','=','bomon.idkhoa')
+                ->groupBy('sinhvien.id')
                  ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
                 ->get();
             }
@@ -183,6 +185,7 @@ class HocBongController extends Controller
             ->join('nganh','nganh.id','=','lop.nganh_id')
             ->join('bomon','bomon.id','=','nganh.idbomon')
             ->join('khoa','khoa.id','=','bomon.idkhoa')
+            ->groupBy('sinhvien.id')
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
             ->get();
         }
@@ -211,6 +214,7 @@ class HocBongController extends Controller
         ->join('nganh','nganh.id','=','lop.nganh_id')
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
+        ->groupBy('sinhvien.id')
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
         }
@@ -661,33 +665,44 @@ class HocBongController extends Controller
          ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)->get();
          $sl_HBdatrao=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->groupBy('lichsu_hocbong.id_sinhvien')
         ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)->get();
-        $thong_ke_charts=HocBong::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
-        ->join('khoa','khoa.id','=','hocbong_phamvi.id_khoa')
-        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-         ->where('hocky_namhoc.idtrangthaihocky','=',2)
-         ->select('hocbong.*','hocky_namhoc.*','khoa.id as idkhoa','khoa.*','hocbong_phamvi.*')
+        
+        $thong_ke_charts_column1 = HocKyNamHoc::join('hocbong','hocbong.idhockynamhoc','=','hocky_namhoc.id')
+        ->join('lichsu_hocbong','lichsu_hocbong.id_hocbong','=','hocbong.id')
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->select('*','hocky_namhoc.idnamhoc as idnh')
+        ->get();
+        $namhoc_chart2 = $HocKyNamHoc_HienTai->idnamhoc;
+    
+
+         $thong_ke_charts_column2=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)
+         ->join('lop','lop.id','=','sinhvien.lop_id')
+         ->join('nganh','nganh.id','=','lop.nganh_id')
+         ->join('bomon','bomon.id','=','nganh.idbomon')
+         ->join('khoa','khoa.id','=','bomon.idkhoa')
+         ->groupBy('sinhvien.id')
+          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
          ->get();
-        $thong_ke_charts_column = DB::table('lichsu_hocbong')->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-           ->select(
-            DB::raw('idnamhoc as idnamhoc'),
-            DB::raw('count(*) as number'))
-           ->groupBy('idnamhoc')
-           ->get();
-         $array[]=['Năm học','Số lượng sinh viên'];
-         foreach($thong_ke_charts_column as $key => $value)
-         {
-            $name=NamHoc::where('id',$value->idnamhoc)->first();
-            $array[++$key] = [$name->tennamhoc, $value->number];
-         }
+
+
+
+
+
+        
+
          $viewData=[
             'soluong_hb'=>$soluong_hb,
             'sl_HBdatrao'=>$sl_HBdatrao,
-            'thong_ke_charts'=>$thong_ke_charts,
+            'namhoc_chart2'=>$namhoc_chart2,
+            'thong_ke_charts_column1'=>$thong_ke_charts_column1,
+            'thong_ke_charts_column2'=>$thong_ke_charts_column2,
 
          ];
-        return view('hocbong::admin.dashboard',$viewData)->with('gender', json_encode($array));
+        return view('hocbong::admin.dashboard',$viewData);
    }
    public function GetHKNHByNH($idnamhoc = ''){
             $dsHKNH = HocKyNamHoc::where('idnamhoc', '=', $idnamhoc)->get();

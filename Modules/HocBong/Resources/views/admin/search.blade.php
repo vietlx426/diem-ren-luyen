@@ -251,7 +251,7 @@
 
                                
                                 <td class="text-center">
-                                  <a href="{{route('hocbong.lichsu.sinhvien',$data->idsv)}}" class="btn btn-success"  title="Lịch sử học bổng module"><i class="fa fa-university"></i></a>
+                                  <a href="{{route('hocbong.lichsu.sinhvien',$data->idsv)}}" class="btn btn-success"  title="Lịch sử học bổng"><i class="fa fa-university"></i></a>
                              
 
                               </td>

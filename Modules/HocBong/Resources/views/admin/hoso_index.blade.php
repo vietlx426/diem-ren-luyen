@@ -45,8 +45,10 @@
                                   <th>MSSV</th>
                                   <th >Tên sinh viên</th>
                                   <th >Học bổng</th>
+                                  <th>Mã học bổng</th>
                                   <th>Học kỳ, năm học</th>
                                   <th >File hồ sơ</th>
+                                  <th>Lịch sử nhận học bổng</th>
                                    <th >Trạng thái</th>
                                 </tr>
                             </thead> 
@@ -59,6 +61,7 @@
                                  <td >
                                  {{$data->hocbong->tenhb}}
                                  </td>
+                                 <td> {{$data->hocbong->mahb}}</td>
                                  <td>
                                  @foreach($dshocky as $hocky)
                                   @if($hocky->id === $data->hocbong->idhockynamhoc)
@@ -78,7 +81,11 @@
                                   @endif 
                                   @endforeach
                                  </td>
-                                
+                                 <td class="text-center">
+                                  <a href="{{route('hocbong.lichsu.sinhvien',$data->sinhvien->id)}}" class="btn btn-success"  title="Lịch sử học bổng"><i class="fa fa-university"></i></a>
+                             
+
+                              </td>
                                 
                                  <td class="text-center">
                                  @if($data->status == 0)
@@ -96,7 +103,7 @@
                                     <i class="fa fa-edit"></i> </a>
 
                                   @else
-                                   <i style="font-size: 40px; color: green" class="fa fa-check-circle" ></i> 
+                                   <i style="font-size: 40px; color: green" class="fa fa-check-circle"></i> 
                                   @endif
                                  </td>
                                   

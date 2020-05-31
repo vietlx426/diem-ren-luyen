@@ -29,9 +29,8 @@
             <table class="table" width="100%">
             <tbody>
                   @foreach($dsHKNH as $data)
-                  <?php $STT=0; ?>
                     <tr>
-                        <td width="10%">{{++$STT}}</td>
+                        <td width="10%">{{$loop->iteration}}</td>
                         <td width="30%">{{$data->tenhockynamhoc}}</td>
                         <td width="20%">Số lượng: <strong>
                            {{ count($dsHocBong->where("idhockynamhoc", $data->id)) }}

@@ -43,9 +43,7 @@
                   @if($hocbong->id_sinhvien === $data->id_sinhvien && $hocbong->idhockynamhoc === $data->idhockynamhoc)
                   <li class="list-group-item">
                     <b>Tên học bổng:  </b>{{$hocbong->HocBong->tenhb}} 
-                    <a href="{{route('admin.delete.history',$hocbong->idlshb)}}"><i style=" color: #337a;" class="fa fa-close pull-right" aria-hidden="true"></i></a>
-
-                    <a href="{{route('admin.edit.history',$hocbong->idlshb)}}"><i style=" color: #337a; margin-right:5px" class="fa fa-cog pull-right" aria-hidden="true"></i></a>
+      
                   </li>
                   <li class="list-group-item"><b>Giá trị:   </b>{{number_format($hocbong->giatri,0,',','.')}}đ</li>
                   @endif
