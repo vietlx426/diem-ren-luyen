@@ -181,8 +181,8 @@
 
       var options = {
         title: "Số lượng sinh viên nhận học bổng theo từng khoa",
-        width: 800,
-        height: 400,
+        width: 900,
+        height: 500,
         bar: {groupWidth: "95%"},
         legend: { position: "none" },
       };
@@ -200,14 +200,14 @@
    {
     var data = google.visualization.arrayToDataTable([
         ["", "Số lượng sinh viên", { role: "style" } ],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-3)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-3))}}, "#3366CC"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-2))}}, "#3366CC"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-1)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-1))}}, "#3366CC"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2))}}, "#3366CC"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-3)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-3))}}, "#b87333"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-2))}}, "#b87333"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2-1)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-1))}}, "#b87333"],
+        ["{{ \App\NamHoc::where('id',$namhoc_chart2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2))}}, "#b87333"],
         
       ]);
     var options = {
-     title : 'Số lượng học bổng'
+     title : 'Số lượng sinh viên nhận học bổng theo từng năm'
     };
     var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 

@@ -18,11 +18,9 @@ use App\LichSuHocBong;
 use App\ThongBaoHocBong;
 use App\ThongBaoVanBan;
 use App\Lop;
-
 use PDF;
 use Auth;
 use Carbon\Carbon;
-
 use DB;
 use Excel;
 class HocBongController extends Controller
@@ -50,7 +48,7 @@ class HocBongController extends Controller
        {
         if($Request->hknh)
         {
-             $getNamHoc=NamHoc::where('id',$Request->namhoc)->first();
+            $getNamHoc=NamHoc::where('id',$Request->namhoc)->first();
             $scholar=HocBong::with('Khoa:id,tenkhoa','HocKyNamHoc:id,tenhockynamhoc')
            ->join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
            ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
@@ -132,6 +130,12 @@ class HocBongController extends Controller
             ->groupBy('sinhvien.id')
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
             ->get();
+            $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+            ->join('lop','lop.id','=','sinhvien.lop_id')
+            ->join('nganh','nganh.id','=','lop.nganh_id')
+            ->join('bomon','bomon.id','=','nganh.idbomon')
+            ->select('*','bomon.idkhoa as idk')
+            ->get();
             }
             else
             {
@@ -160,6 +164,12 @@ class HocBongController extends Controller
                 ->groupBy('sinhvien.id')
                  ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
                 ->get();
+                $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+                ->join('lop','lop.id','=','sinhvien.lop_id')
+                ->join('nganh','nganh.id','=','lop.nganh_id')
+                ->join('bomon','bomon.id','=','nganh.idbomon')
+                ->select('*','bomon.idkhoa as idk')
+                ->get();
             }
         }
         elseif ($Request->hknh) 
@@ -187,6 +197,12 @@ class HocBongController extends Controller
             ->join('khoa','khoa.id','=','bomon.idkhoa')
             ->groupBy('sinhvien.id')
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
+            ->get();
+            $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+            ->join('lop','lop.id','=','sinhvien.lop_id')
+            ->join('nganh','nganh.id','=','lop.nganh_id')
+            ->join('bomon','bomon.id','=','nganh.idbomon')
+            ->select('*','bomon.idkhoa as idk')
             ->get();
         }
         else
@@ -217,6 +233,12 @@ class HocBongController extends Controller
         ->groupBy('sinhvien.id')
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
+        $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->join('nganh','nganh.id','=','lop.nganh_id')
+        ->join('bomon','bomon.id','=','nganh.idbomon')
+        ->select('*','bomon.idkhoa as idk')
+        ->get();
         }
         
 
@@ -242,7 +264,6 @@ class HocBongController extends Controller
 
 
 
-
         $viewData=[
             'scholar'=>$scholar,
             'ds_khoa'=>$ds_khoa,
@@ -259,7 +280,7 @@ class HocBongController extends Controller
             'sl_sv'=>$sl_sv,
             'getHKNH'=>$getHKNH,
             'ds_hknh'=>$ds_hknh,
-
+            'sum'=>$sum,
 
         ];
         

@@ -15,12 +15,7 @@
   <div id="div-studentListResult" class="row">
     <div class="x_panel">
       <div class="x_title">
-        <div class="pull-right">
-          
-          <a href="{{route('thongbao.create')}}" class="btn btn-success">
-            <strong><i class="fa fa-upload"></i> HỒ SƠ </strong>
-          </a>
-        </div>
+        
         <h2> <i class="fa fa-list"></i>DANH SÁCH HỒ SƠ CẤP HỌC BỔNG</h2>
         <ul class="nav navbar-right panel_toolbox">
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -128,7 +123,7 @@
                 <!-- <form action="" method="post" class="form-signin" accept-charset="utf-8"> -->
                     <div class="modal-header">
                         <div class="col-11 pull-left">
-                            <h3>Sửa văn bản</h3>
+                            <h3>Trao học bổng</h3>
                         </div>
                         <div class="col-1 pull-right">
                             <button type="button" class="close" data-dismiss="modal" title="Đóng Form">&times;</button>
@@ -137,7 +132,6 @@
                     <div class="modal-body">
                       @include('layout.block.message_validation')
                       <div class="form-group">
-                            <label for="TenSV">Giá trị học bổng</label>
                             <input type="hidden" name="IDHoSo" id="IDHoSo" class="form-control IDHoSo" placeholder="Tên văn bản"  autofocus>
                             
                         </div>

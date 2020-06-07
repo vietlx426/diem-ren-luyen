@@ -280,8 +280,6 @@
                                    <th width="10%">STT</th>
                                     <th width="23%">Khoa</th>
                                     <th width="10%">Số lượng HB</th>
-                                   
-                                    
                                     <th width="10%">Số lượng SV nhận HB</th>
                                     <th width="20%">Tổng số tiền đã trao</th>
                                     <th width="15%"></th>
@@ -302,12 +300,9 @@
                                  
                                    <td>
                                     {{ count($sl_sv->where("idkhoa", $data->id)) }}
-                                      
-                                     
                                    </td>
                                    <td>
-
-                                    {{number_format(($sl_sv->where("idkhoa", $data->id))->sum("giatri"),0,',','.')}} VNĐ
+                                    {{number_format(($sum->where("idk", $data->id))->sum("giatri"),0,',','.')}} VNĐ
                                    </td>
                                    <td class="text-center">
                                   <?php
