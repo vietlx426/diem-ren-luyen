@@ -27,6 +27,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Validator;
+use Modules\HocBong\Entities\HoSoLyDo;
 
 
 use App\NamHoc;
@@ -54,7 +55,6 @@ class SinhVienController extends Controller
        ->where('lop.id','=',$idLop->lop_id)
        
        ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->orderBy('hocbong_thongbao.id','desc')->get();
-
       $viewData=[
         'dsHoSo'=>$dsHoSo,
         'dsHKNH'=>$dsHKNH,
@@ -82,8 +82,10 @@ class SinhVienController extends Controller
       $ThongBao=ThongBaoHocBong::where('hocbong_thongbao.id','=',$id)->first();
       $FileDinhKem=ThongBaoVanBan::where('hocbong_thongbao_vanban.id_thongbao','=',$id)->get();
       $author=DB::table('users')->where("id",$ThongBao->author)->first();
+      $now = Carbon::now()->toDateString();
+      $checkDate = $now <= ($ThongBao->ngay_het_han);
       $viewData=[
-
+        'checkDate'=>$checkDate,
          'ThongBao'=>$ThongBao,
         'author'=>$author,
       'FileDinhKem'=>$FileDinhKem,
@@ -115,9 +117,6 @@ class SinhVienController extends Controller
 
 
       
-         
-        
-      
       $idSV=Auth::user()->cbgvsv_id;
       $sinhvien = SinhVien::where('id',$idSV)->first();
       $getHocBong = HocBong::where('id',$request->MaHocBong)->first();
@@ -126,6 +125,7 @@ class SinhVienController extends Controller
         $hoso->id_hocbong=$request->MaHocBong; 
         $hoso->id_sinhvien=$idSV;
         $hoso->status=0;
+        $hoso->noidung=null;
         $hoso->created_at=Carbon::now();
         $hoso->save();
         $index = 0;

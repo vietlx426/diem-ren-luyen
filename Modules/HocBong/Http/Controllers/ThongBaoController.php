@@ -19,6 +19,7 @@ use Modules\HocBong\Http\Requests\ThongBaoRequest;
 use Modules\HocBong\Http\Requests\VanBanRequest;
 use Modules\HocBong\Entities\HoSoHocBong;
 use Modules\HocBong\Entities\FileHoSoHocBong;
+use Modules\HocBong\Entities\HoSoLyDo;
 use DB;
 use Carbon\Carbon;
 use Auth;
@@ -78,6 +79,7 @@ class ThongBaoController extends Controller
         
         $thongbao->noidung=$request->noidung;
         $thongbao->id_hocbong=$request->hocbong;
+        $thongbao->ngay_het_han=$request->ngayhethan;
         $thongbao->author=Auth::user()->id;
         $thongbao->slug=str_slug($request->tieude);
         $thongbao->status=1;
@@ -240,6 +242,19 @@ class ThongBaoController extends Controller
             $traohb->id_sinhvien=$request->IDSV;
             $traohb->giatri=$request->GTHB;
             $traohb->save();
+        
+        return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back()->with('alert','Đã có lỗi xảy ra');
+        }
+    }
+
+    public function tuchoiHoSo(Request $request){
+        try {
+            $reject = HoSoHocBong::find($request->IDHoSo1);
+            $reject->status = 2;
+            $reject->noidung=$request->lydo;
+            $reject->save();
         
         return redirect()->back();
         } catch (Exception $e) {

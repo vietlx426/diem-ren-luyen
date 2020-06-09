@@ -79,6 +79,10 @@
                                 <td>
                                 @if($data->status === 0)
                                 <span class="label label-primary"  style="font-size: 12px"> Đang xử lý </span>
+                                @elseif($data->status === 2)
+                                <span class="label label-danger"  style="font-size: 12px">Hồ sơ không đạt </span>
+                                <br><br>
+                                Lý do: {{$data->noidung}}
                                 @else
                                 <span class="label label-success"  style="font-size: 12px"> Đã nhận học bổng </span>
 

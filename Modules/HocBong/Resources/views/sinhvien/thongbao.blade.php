@@ -17,9 +17,9 @@
     <div class="x_panel">
       <div class="x_title">
         <h2> <i class="fa fa-history"></i>XEM THÔNG BÁO</h2>
+        @if($checkDate === true)
         <div class="pull-right">
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#NopHoSo" title="Sửa" onclick=""> <strong><i class="fa fa-upload">
-
         </i> NỘP HỒ SƠ </strong>
         
       </button>
@@ -29,6 +29,7 @@
     </div>
 @endif
         </div>
+      @endif
         <div class="clearfix"></div>
       </div>
 

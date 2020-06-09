@@ -83,6 +83,7 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	Route::get('ho-so', 'ThongBaoController@getDSHoSo')->name('danhsach.hoso');
 	Route::get('file-ho-so/{id}', 'ThongBaoController@getFile')->name('download.file.hoso');
 	Route::post('/hoso-trao-hocbong','ThongBaoController@traoHBOnHoSo')->name('hoso.trao.hocbong');
+	Route::post('/tuchoi-hoso','ThongBaoController@tuchoiHoSo')->name('tuchoi.hoso');
 	
 
 

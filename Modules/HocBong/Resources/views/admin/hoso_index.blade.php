@@ -44,7 +44,7 @@
                                   <th>Học kỳ, năm học</th>
                                   <th >File hồ sơ</th>
                                   <th>Lịch sử nhận học bổng</th>
-                                   <th >Trạng thái</th>
+                                   <th></th>
                                 </tr>
                             </thead> 
                             <tbody>
@@ -78,6 +78,7 @@
                                  </td>
                                  <td class="text-center">
                                   <a href="{{route('hocbong.lichsu.sinhvien',$data->sinhvien->id)}}" class="btn btn-success"  title="Lịch sử học bổng"><i class="fa fa-university"></i></a>
+                                  
                              
 
                               </td>
@@ -96,7 +97,22 @@
                                      '{{$data->hocbong->gtmoihocbong}}'
                                    )" data-toggle="modal" data-target="#TraoHocBong" class="btn btn-warning" title="Trao học bổng">
                                     <i class="fa fa-edit"></i> </a>
-
+                                    <br>
+                                    <a
+                                    onclick="TuChoi(
+                                     '{{$data->id}}',
+                                     '{{$data->sinhvien->mssv}}',
+                                     '{{$data->sinhvien->id}}', 
+                                     '{{$data->sinhvien->hochulot}}',
+                                     '{{$data->sinhvien->ten}}',
+                                     '{{$data->hocbong->mahb}}',
+                                     '{{$data->hocbong->id}}',
+                                     '{{$data->hocbong->tenhb}}',
+                                     '{{$data->hocbong->gtmoihocbong}}'
+                                   )"
+                                     class="btn btn-danger" data-toggle="modal" data-target="#TuChoi"  title="Từ chối"><i class="fa fa-eject"></i></a>
+                                  @elseif($data->status == 2)
+                                  <i style="font-size: 40px; color: red" class="fa fa-ban"></i> 
                                   @else
                                    <i style="font-size: 40px; color: green" class="fa fa-check-circle"></i> 
                                   @endif
@@ -178,6 +194,68 @@
         </div>
     </div>
   </form>
+  <form action="{{route('tuchoi.hoso')}}" method="post">
+    {{ csrf_field() }}
+  <div id="TuChoi" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <!-- <form action="" method="post" class="form-signin" accept-charset="utf-8"> -->
+                    <div class="modal-header">
+                        <div class="col-11 pull-left">
+                            <h3>Bác đơn hồ sơ</h3>
+                        </div>
+                        <div class="col-1 pull-right">
+                            <button type="button" class="close" data-dismiss="modal" title="Đóng Form">&times;</button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                      @include('layout.block.message_validation')
+                      <div class="form-group">
+                            <input type="hidden" name="IDHoSo1" id="IDHoSo1" class="form-control IDHoSo" placeholder="Tên văn bản"  autofocus>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="TenSV"> MSSV</label>
+                            <input type="text" name="MSSV1" id="MSSV1" class="form-control MSSV" placeholder="MSSV"  readonly="readonly"   autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="TenSV"> Họ tên sinh viên</label>
+                            <input type="text" name="TenSV1" id="TenSV1" class="form-control MaLop" placeholder="Tên sinh viên"  readonly="readonly"   autofocus>
+                            
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="TenSV"> Mã học bổng</label>
+                            <input type="text" name="MaHB1" id="MaHB1" class="form-control MaHB" placeholder="Tên văn bản"  readonly="readonly"   autofocus>
+                            <input type="hidden" name="IDHB1" id="IDHB1" class="form-control IDHB" placeholder="Tên văn bản"  readonly="readonly"   autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="TenSV"> Tên học bổng</label>
+                            <input type="text" name="TenHB1" id="TenHB1" class="form-control TenHB" placeholder="Tên văn bản"  readonly="readonly"   autofocus>
+                            
+                        </div>
+                        <div class="form-group">
+                          <label for="lydo">Lý do</label>
+                            <textarea name="lydo" id="lydo"  class="form-control lydo" placeholder="Nhập lý do"  autofocus required></textarea>
+                        </div>
+                        
+                        
+                     
+                        
+
+                        
+                       
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Thực hiện</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-remove"></i> Đóng </button>
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>
+    </div>
+  </form>
 @endsection
 @section('javascript')
     @parent
@@ -213,6 +291,16 @@
     $("#IDHB").val($idhb);
     $('#TenHB').val($tenhb);
     $('#GTHB').val($gtmoihocbong);
+   
+}
+function TuChoi($idhoso,$mssv,$idsv, $hochulot, $tensv, $mahb, $idhb , $tenhb) {
+    $("#IDHoSo1").val($idhoso);
+    $("#MSSV1").val($mssv);
+    $("#IDSV1").val($idsv);
+    $("#TenSV1").val($hochulot+' '+$tensv);
+    $("#MaHB1").val($mahb);
+    $("#IDHB1").val($idhb);
+    $('#TenHB1').val($tenhb);
    
 }
     var msg = '{{Session::get('alert_them')}}';

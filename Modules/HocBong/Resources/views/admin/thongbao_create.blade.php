@@ -48,6 +48,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="">Ngày hết hạn<span class="required"></span></label>
+
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="btn-group">
+                                <div class="input-group image-preview">
+                                  
+                                    <input type="date" name="ngayhethan" id="ngayhethan" class="form-control" value="{{old('ngayhethan')}}">
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+              </div>
                 
                 <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 ">
                     <div class="form-group">
@@ -106,7 +123,7 @@
                             <div class="btn-group">
                                 <div class="input-group image-preview">
                                   
-                                    <input type="text" name="tenvanban[]" id="tenvanban" class="form-control" value="{{old('tenbotieuchi')}}" placeholder="Tên văn bản">
+                                    <input type="text" name="tenvanban[]" id="tenvanban" class="form-control" value="{{old('tenvanban')}}" placeholder="Tên văn bản">
                                     
                                 </div>
                             </div>
@@ -160,7 +177,7 @@
                             <div class="btn-group">
                                 <div class="input-group image-preview">
                                   
-                                    <input type="text" name="tenvanban[]" id="tenvanban" class="form-control" value="{{old('tenbotieuchi')}}" placeholder="Tên văn bản">
+                                    <input type="text" name="tenvanban[]" id="tenvanban" class="form-control" value="{{old('tenvanban')}}" placeholder="Tên văn bản">
                                     
                                 </div>
                             </div>

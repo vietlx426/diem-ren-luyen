@@ -113,31 +113,39 @@ class CoVanHocTapController extends Controller
       $CVHT = CoVanHocTap::where('canbogiangvien_id', '=', $idCVHT)
             -> where('trangthai_id', '=', 1)
             -> first();
-      Excel::create('Thống kê khoa', function($excel) use($CVHT,$getHKNH){
+      Excel::create('Thống kê lớp học bổng lớp '.$CVHT->lop->tenlop.' '.$getHKNH->tenhockynamhoc, function($excel) use($CVHT,$getHKNH){
          $excel->setTitle('Danh sách sinh viên nhận học bổng');
          $excel->sheet($CVHT->lop->tenlop,function($sheet) use($CVHT,$getHKNH) {
 
-          $dsSinhVien = SinhVien::where('lop_id', '=', $CVHT->lop_id)
-          ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+
+
+          $dsSinhVien = LichSuHocBong::groupBy('id_sinhvien')
           ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-          ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-          ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
-          ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
-          ->where('hocky_namhoc.id',$getHKNH->id)
-          ->select('sinhvien.*','lichsu_hocbong.giatri','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
-          ->groupBy('sinhvien.id')
+          ->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+          ->where('hocbong.idhockynamhoc',$getHKNH->id)
+          ->where('lop_id', '=', $CVHT->lop_id)
+          ->selectRaw('sum(giatri) as sum, id_sinhvien')
           ->get()->toArray();
-            $data_array[] = array('MSSV', 'Họ tên SV','Điểm học tập','Điểm rèn luyện','Số tiền');
+
+            $data_array[] = array('MSSV', 'Họ tên SV','Điểm học tập','Điểm rèn luyện','Học bổng đã nhận','Số tiền');
          foreach ($dsSinhVien as  $dt) 
          {
-         
-
+           $info = SinhVien::where('sinhvien.id',$dt['id_sinhvien'])
+           ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+           ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+           ->where('bangdiemhoctap.hockynamhoc_id',$getHKNH->id)
+           ->where('bangdiemrenluyen.hocky_namhoc_id',$getHKNH->id)
+           ->select('sinhvien.*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')->first();
+           $dshb = LichSuHocBong::where('id_sinhvien',3)
+           ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+           ->pluck('tenhb')->toArray();
            $data_array[] = array(
-            'MSSV'  		  => $dt['mssv'],
-            'Họ tên sinh viên'    => $dt['hochulot'].' '.$dt['ten'],
-            'Điểm học tập'    	  => $dt['diemht'],
-            'Điểm rèn luyện'    	  => $dt['drl'],
-            'Số tiền'      => number_format($dt['giatri'],0,',','.'),
+            'MSSV'  		  => $info->mssv,
+            'Họ tên sinh viên'    => $info->hochulot.' '.$info->ten,
+            'Điểm học tập'    	  => $info->diemht,
+            'Điểm rèn luyện'    	  => $info->drl,
+            'Học bổng đã nhận'    	  => implode('. ',$dshb),
+            'Số tiền'      => number_format($dt['sum'],0,',','.'),
             
            );
          }
