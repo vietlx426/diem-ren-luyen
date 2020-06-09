@@ -54,7 +54,7 @@
                 <img src="{{URL::asset('images/icons/class.png')}}" alt="" style="width: 50%;">
               </div>
               <div class="row title">
-             TỔNG SỐ TIỀN ĐÃ NHẬN: {{number_format((isset($soluong_hb) ? $soluong_hb->sum("giatri") : 0), 0 , ',', '.')}} 
+             TỔNG SỐ TIỀN ĐÃ NHẬN: {{number_format((isset($sotien_theolop) ? $sotien_theolop->sum("giatri") : 0), 0 , ',', '.')}} đ
               </div>
             </div>
           </div>
@@ -87,6 +87,7 @@
                
                   <tr class="filters">
                       <th width="10%">STT</th>
+                      <th width="10%">MSSV</th>
                       <th width="23%">Tên sinh viên</th>
                       <th width="10%">Tên học bổng đã nhận</th>
                       
@@ -106,6 +107,7 @@
                 @foreach($dssvByHocKy as $data)
                 <tr>
                   <th >{{++$STT}}</th>
+                  <td >{{$data->mssv}}</td>
                   <td >{{$data->hochulot}} {{$data->ten}}</td>
                   <td>
                      
@@ -119,7 +121,7 @@
                   <td>{{$data->diemhoctap}}</td>
                  <td>{{$data->drl}}</td>
                  <td>
-                  {{ number_format(($soluong_hb->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
+                  {{ number_format(($sotien_theolop->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
 
                  </td>
                  <td>
@@ -140,6 +142,7 @@
                
                   <tr class="filters">
                       <th width="10%">STT</th>
+                      <th width="10%">MSSV</th>
                       <th width="23%">Tên sinh viên</th>
                       <th width="10%">Tên học bổng đã nhận</th>
                      
@@ -156,6 +159,8 @@
                 @foreach($dssvByNamHoc as $data)
                 <tr>
                   <th >{{++$STT}}</th>
+                  <td >{{$data->mssv}}</td>
+
                   <td >{{$data->hochulot}} {{$data->ten}}</td>
                   <td>
                      
@@ -168,7 +173,7 @@
                   </td>
                  
                  <td>
-                  {{ number_format(($soluong_hb->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
+                  {{ number_format(($sotien_theolop->where("id_sinhvien", $data->id_sinhvien))->sum("giatri"), 0 , ',', '.') }}đ
 
                  </td>
                  <td>

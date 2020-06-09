@@ -9,7 +9,9 @@
   <!-- Information statical -->
   <div class="row">
     <div class="x_panel">
-     
+    <h2> <i class="fa fa-graduation-cap"></i>DASHBOARD HỌC BỔNG NĂM HỌC {{isset($HocKyNamHoc_HienTai) ? $HocKyNamHoc_HienTai->namhoc->tennamhoc : ''}} 
+
+</h2>
       <div class="x_content">
         <div class="row">
         

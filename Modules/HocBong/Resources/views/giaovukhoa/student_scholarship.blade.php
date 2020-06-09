@@ -62,7 +62,7 @@
               <th class="text-center">MSSV</th>
               <th>Họ tên</th>
               <th>Email</th>
-              <th>Số lượng HB đã nhận</th>
+              <th>Số lượng học bổng đã nhận</th>
               <th class="text-center"></th>
             </tr>
           </thead>

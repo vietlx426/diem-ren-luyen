@@ -10,10 +10,16 @@
 @section('content')
   <div class="row">
     <div class="x_panel">
+    <div class="pull-right">
+          <a href="{{route('giaovukhoa.download.excel')}}" class="btn btn-success student_import">
+            <strong><i class="fa fa-download"></i>TẢI THỐNG KÊ</strong>
+          </a>
+        </div>
       <div class="x_title">
           <h2> <i class="fa fa-graduation-cap"></i> DANH SÁCH LỚP - SINH VIÊN - HỌC BỔNG</h2>
           <div class="clearfix"></div>
       </div>
+      
       <div class="x_content" >
        <table id="tbl_sinhvien" class="table table-striped table-bordered" >
         <p><strong>Thông báo: </strong></p>

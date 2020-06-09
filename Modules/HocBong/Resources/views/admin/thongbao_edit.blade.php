@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('title')
-  @parent | Advisers
+  @parent | Sửa thông báo
 @endsection
 
 @section('content')

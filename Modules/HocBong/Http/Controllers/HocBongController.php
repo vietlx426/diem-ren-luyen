@@ -674,19 +674,15 @@ class HocBongController extends Controller
         
         return $pdf->download('ThongKe_HocBong' .$getTenHKNH->tenhockynamhoc . '.pdf');
    }
-   public function dashboard($idHocKyHienChon = '')
+   public function dashboard()
    {
         $HocKyNamHoc_HienTai = HocKyNamHoc::where('idtrangthaihocky', '=', 2)->first();
-        if($idHocKyHienChon=='')
-            $hocKyNamHoc_HienChon = $HocKyNamHoc_HienTai;
-        else
-            $hocKyNamHoc_HienChon = HocKyNamHoc::find($idHocKyHienChon);
+        
 
         $soluong_hb=HocBong::join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
          ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)->get();
          $sl_HBdatrao=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
-        ->groupBy('lichsu_hocbong.id_sinhvien')
         ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)->get();
         
         $thong_ke_charts_column1 = HocKyNamHoc::join('hocbong','hocbong.idhockynamhoc','=','hocky_namhoc.id')
@@ -716,6 +712,7 @@ class HocBongController extends Controller
         
 
          $viewData=[
+            'HocKyNamHoc_HienTai'=>$HocKyNamHoc_HienTai,
             'soluong_hb'=>$soluong_hb,
             'sl_HBdatrao'=>$sl_HBdatrao,
             'namhoc_chart2'=>$namhoc_chart2,

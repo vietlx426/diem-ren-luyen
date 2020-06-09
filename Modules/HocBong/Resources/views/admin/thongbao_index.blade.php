@@ -1,7 +1,7 @@
 @extends('admin.layout.master')
 
 @section('title')
-  @parent | Search student
+  @parent | Thông báo
 @endsection
 
 @section('css')

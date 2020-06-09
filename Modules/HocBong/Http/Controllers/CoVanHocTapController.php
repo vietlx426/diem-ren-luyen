@@ -12,7 +12,7 @@ use App\HocKyNamHoc;
 use App\ThongBaoHocBong;
 use App\ThongBaoVanBan;
 use App\LichSuHocBong;
-
+use Maatwebsite\Excel\Facades\Excel;
 use DB;
 
 class CoVanHocTapController extends Controller
@@ -106,6 +106,46 @@ class CoVanHocTapController extends Controller
     
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
+    }
+    public function covanhoctap_download_excel(){
+      $idCVHT=Auth::user()->cbgvsv_id;
+      $getHKNH=HocKyNamHoc::where('idtrangthaihocky',2)->first();
+      $CVHT = CoVanHocTap::where('canbogiangvien_id', '=', $idCVHT)
+            -> where('trangthai_id', '=', 1)
+            -> first();
+      Excel::create('Thống kê khoa', function($excel) use($CVHT,$getHKNH){
+         $excel->setTitle('Danh sách sinh viên nhận học bổng');
+         $excel->sheet($CVHT->lop->tenlop,function($sheet) use($CVHT,$getHKNH) {
+
+          $dsSinhVien = SinhVien::where('lop_id', '=', $CVHT->lop_id)
+          ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
+          ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+          ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+          ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+          ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+          ->where('hocky_namhoc.id',$getHKNH->id)
+          ->select('sinhvien.*','lichsu_hocbong.giatri','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+          ->groupBy('sinhvien.id')
+          ->get()->toArray();
+            $data_array[] = array('MSSV', 'Họ tên SV','Điểm học tập','Điểm rèn luyện','Số tiền');
+         foreach ($dsSinhVien as  $dt) 
+         {
+         
+
+           $data_array[] = array(
+            'MSSV'  		  => $dt['mssv'],
+            'Họ tên sinh viên'    => $dt['hochulot'].' '.$dt['ten'],
+            'Điểm học tập'    	  => $dt['diemht'],
+            'Điểm rèn luyện'    	  => $dt['drl'],
+            'Số tiền'      => number_format($dt['giatri'],0,',','.'),
+            
+           );
+         }
+           $sheet->fromArray($data_array,null,'A1',false,false);
+         });
+       
+       
+     })->export('xlsx');
     }
    
 

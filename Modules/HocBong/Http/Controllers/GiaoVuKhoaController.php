@@ -13,6 +13,7 @@ use App\ThongBaoHocBong;
 use App\ThongBaoVanBan;
 use App\LichSuHocBong;
 use App\GiaoVuKhoa;
+use Maatwebsite\Excel\Facades\Excel;
 
 use DB;
 class GiaoVuKhoaController extends Controller
@@ -49,6 +50,8 @@ class GiaoVuKhoaController extends Controller
       
       return view('hocbong::giaovukhoa.index',compact('dsLop','ThongBao'));
     }
+
+    
 
     public function giaovukhoa_hocbong_sinhvien(Request $Request,$id){
       $dsSinhVien = SinhVien::where('lop_id', '=',$id)
@@ -111,5 +114,55 @@ class GiaoVuKhoaController extends Controller
     
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
+    }
+    public function giaovukhoa_download_excel(){
+      $idGVK=Auth::user()->cbgvsv_id;
+      $dsLop = GiaoVuKhoa::where('cbgv_id', '=', $idGVK)
+            -> where('trangthai_id', '=', 1)
+            -> join('bomon', 'bomon.idkhoa', '=', 'giaovukhoa.khoa_id')
+            -> join('nganh', 'nganh.idbomon', '=', 'bomon.id')
+            -> join('lop', 'lop.nganh_id', '=', 'nganh.id')
+            -> leftjoin('khoahoc', 'khoahoc.id', '=', 'lop.khoahoc_id')
+            -> where('khoahoc.namketthuc', '>=', date('Y'))
+            -> select('*','lop.id as idlop')
+            -> get();
+        
+         Excel::create('Thống kê học bổng năm học ', function($excel) use($dsLop) {
+
+         	foreach ($dsLop as $key => $lop) 
+         	{
+	          $excel->setTitle('Danh sách sinh viên nhận học bổng');
+	        	$excel->sheet($lop->tenlop,function($sheet) use($lop) {
+
+	         		$data= DB::table('lichsu_hocbong')
+	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
+	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+	         		->join('lop','lop.id','=','sinhvien.lop_id')
+	         		->where('lop.id',$lop->idlop)
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->groupBy('sinhvien.id')
+	         		->get()
+	         		->toArray();
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
+			    	foreach ($data as  $dt) 
+			    	{
+			    		$data_array[] = array(
+				       'MSSV'  		  => $dt->mssv,
+				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
+				       'Lớp'    	  => $dt->tenlop,
+				       'Điểm học tập'    	  => $dt->diemht,
+				       'Điểm rèn luyện'    	  => $dt->drl,
+				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
+				       
+			      	);
+			    	}
+	        		$sheet->fromArray($data_array,null,'A1',false,false);
+	        	});
+        	
+        	}
+        	
+        	
+        })->export('xlsx'); 
     }
 }

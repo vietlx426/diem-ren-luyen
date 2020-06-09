@@ -27,11 +27,10 @@ class ThongKeController extends Controller
     
     public function faculty($id,$idnamhoc){
         
-        $tenkhoa=Khoa::where('id',$id)->first();
+        $tenkhoa=Khoa::find($id);
         $getNamHoc=NamHoc::find($idnamhoc);
         $soluong_hb=Scholarship::join('hocbong_phamvi','hocbong_phamvi.id_hocbong','=','hocbong.id')
-        ->join('khoa','khoa.id','=','hocbong_phamvi.id_khoa')
-        ->where('khoa.id','=',$id)
+        ->where('hocbong_phamvi.id_khoa','=',$id)
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
         ->get();
@@ -70,12 +69,14 @@ class ThongKeController extends Controller
         ->groupBy('sinhvien.id')
          ->get();
 
+         $sotien_theolop = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+         ->get();
 
 
         $viewData=[
             'tenkhoa'=>$tenkhoa,
             'soluong_hb'=>$soluong_hb,
-            
+            'sotien_theolop'=>$sotien_theolop,
             'sl_HBdatrao'=>$sl_HBdatrao,
             'getNamHoc'=>$getNamHoc,
             'ds_lop'=>$ds_lop,
@@ -101,6 +102,7 @@ class ThongKeController extends Controller
         ->join('nganh','nganh.id','=','lop.nganh_id')
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
+        ->groupBy('sinhvien.id')
         ->where('khoa.id','=',$id)
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
@@ -115,14 +117,18 @@ class ThongKeController extends Controller
          ->join('lop','lop.id','=','sinhvien.lop_id')
          ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
          ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+         ->groupBy('sinhvien.id')
        ->where('hocky_namhoc.id','=',$idhknh)
          ->get();
 
-
+         $sotien_theolop = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->where('hocbong.idhockynamhoc','=',$idhknh)
+        ->get();
         $viewData=[
             'tenkhoa'=>$tenkhoa,
             'soluong_hb'=>$soluong_hb,
-            
+            'sotien_theolop'=>$sotien_theolop,
             'sl_HBdatrao'=>$sl_HBdatrao,
             'getHKNH'=>$getHKNH,
             'ds_lop'=>$ds_lop,
@@ -143,6 +149,11 @@ class ThongKeController extends Controller
         ->groupBy('sinhvien.id')
         ->get();
 
+        $sotien_theolop = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
+        ->where('sinhvien.lop_id','=',$id)->get();
         $dssvByNamHoc=SinhVien::where('lop_id',$id)
         ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
@@ -162,7 +173,7 @@ class ThongKeController extends Controller
             'dssvByNamHoc'=>$dssvByNamHoc,
             'dshb'=>$dshb,
             'soluong_hb'=>$soluong_hb,
-            
+            'sotien_theolop'=>$sotien_theolop
 
         ];
         return view('hocbong::admin.statistic_class',$viewData);
@@ -187,10 +198,10 @@ class ThongKeController extends Controller
         ->groupBy('sinhvien.id')
         ->get();
         $dshb=LichSuHocBong::all();
-        $a=1;
-        
-
-
+        $sotien_theolop = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->where('hocbong.idhockynamhoc','=',$idhknh)
+        ->where('sinhvien.lop_id','=',$id)->get();
 
         $viewData=[
             'tenlop'=>$tenlop,
@@ -198,6 +209,7 @@ class ThongKeController extends Controller
             'soluong_hb'=>$soluong_hb,
             'dssvByHocKy'=>$dssvByHocKy,
             'dshb'=>$dshb,
+            'sotien_theolop'=>$sotien_theolop,
 
         ];
         return view('hocbong::admin.statistic_class',$viewData);

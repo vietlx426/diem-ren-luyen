@@ -58,7 +58,7 @@
             </div>
           </div>
 
-          <div class="col-xm-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+          <!-- <div class="col-xm-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
             <div class="row dash-box">
               <div class="row img">
                 <img src="{{URL::asset('images/icons/class.png')}}" alt="" style="width: 50%;">
@@ -67,7 +67,7 @@
              TỔNG TRỊ GIÁ: {{number_format((isset($tong_trigia) ? $tong_trigia : 0), 0 , ',', '.')}} 
               </div>
             </div>
-          </div>
+          </div> -->
            <div class="col-xm-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
             <div class="row dash-box">
               <div class="row img">
@@ -135,7 +135,7 @@
                      {{ count($sl_SVlop->where("lop_id", $data->lopid)) }}
                   </td>
                  <td>
-                {{number_format(($sl_SVlop->where("lop_id", $data->lopid))->sum("giatri"),0,',','.')}} VNĐ
+                {{number_format(($sotien_theolop->where("lop_id", $data->lopid))->sum("giatri"),0,',','.')}} VNĐ
                    
                  </td>
                  <td>

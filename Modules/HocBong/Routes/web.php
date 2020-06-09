@@ -110,6 +110,7 @@ Route::middleware('covanhoctap')->prefix('covanhoctap')->group(function(){
 			Route::get('sinhvien-lichsu/{id}/','CoVanHocTapController@covanhoctap_hocbong_lichsu')->name('covanhoctap.hocbong.lichsu');
 			Route::get('/xem-thong-bao/{id}','CoVanHocTapController@covanhoctap_thongbao')->name('covanhoctap.thongbao');
 			Route::get('/download/{id}','CoVanHocTapController@covanhoctap_download')->name('covanhoctap.download');
+			Route::get('/download-excel','CoVanHocTapController@covanhoctap_download_excel')->name('covanhoctap.download.excel');
 
 			
 		});
@@ -122,6 +123,7 @@ Route::middleware('giaovukhoa')->prefix('giaovukhoa')->group(function(){
 			Route::get('sinhvien-lichsu/{id}','GiaoVuKhoaController@giaovukhoa_hocbong_lichsu')->name('giaovukhoa.hocbong.lichsu');
 			Route::get('/xem-thong-bao/{id}','GiaoVuKhoaController@giaovukhoa_thongbao')->name('giaovukhoa.thongbao');
 			Route::get('/download/{id}','GiaoVuKhoaController@giaovukhoa_download')->name('giaovukhoa.download');
+			Route::get('/download-excel','GiaoVuKhoaController@giaovukhoa_download_excel')->name('giaovukhoa.download.excel');
 		});
 });
 

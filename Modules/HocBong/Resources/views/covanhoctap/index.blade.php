@@ -1,6 +1,6 @@
 @extends('covanhoctap.layout.master')
 @section('title')
- @parent | Student
+ @parent | Thông tin học bổng
 @endsection
 @section('css')
     <!-- Datatables -->
@@ -14,6 +14,11 @@
 @section('content')
   <div class="row">
     <div class="x_panel">
+    <div class="pull-right">
+          <a href="{{route('covanhoctap.download.excel')}}" class="btn btn-success student_import">
+            <strong><i class="fa fa-download"></i>TẢI THỐNG KÊ</strong>
+          </a>
+        </div>
       <div class="x_title">
         <h2> <i class="fa fa-graduation-cap"></i> Danh sách sinh viên nhận học bổng {{isset($getHKNH) ? $getHKNH->tenhockynamhoc : ''}} </h2>
         <ul class="nav navbar-right panel_toolbox">
@@ -24,7 +29,7 @@
       </div>
 
       <div class="x_content">
-       <table id="tbl_sinhvien" class="table table-striped table-bordered">
+       <table id="tbl_thongbao" class="table table-striped table-bordered">
           <thead>
             <tr>
               <th class="text-right"></th>
@@ -141,6 +146,7 @@
     <script src="{{URL::asset('gentelella-master/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
 
     <script type="text/javascript">
+      $('#tbl_thongbao').dataTable();
       $('#tbl_sinhvien').dataTable();
     </script>
 @endsection
