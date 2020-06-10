@@ -107,9 +107,9 @@ class CoVanHocTapController extends Controller
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
     }
-    public function covanhoctap_download_excel(){
+    public function covanhoctap_download_excel($idhk){
       $idCVHT=Auth::user()->cbgvsv_id;
-      $getHKNH=HocKyNamHoc::where('idtrangthaihocky',2)->first();
+      $getHKNH=HocKyNamHoc::find($idhk);
       $CVHT = CoVanHocTap::where('canbogiangvien_id', '=', $idCVHT)
             -> where('trangthai_id', '=', 1)
             -> first();

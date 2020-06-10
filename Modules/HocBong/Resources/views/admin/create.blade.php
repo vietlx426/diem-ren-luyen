@@ -11,7 +11,7 @@
     <div class="x_panel">
       <div class="x_title">
         <div class="pull-right">
-          
+          <a href="{{route('hocbong.index')}}" class="btn btn-primary">Trở về</a>
           <button class="btn btn-success" onclick="myFunction()">Thêm thông báo</button>
           </a>
         </div>
@@ -28,22 +28,26 @@
 
          
             <div class="form-group col-md-4{{$errors->has('mahb')? ' has-error' : ''}}">
-                <label class="control-label">Mã học bổng</label>
-                <input type="text" id="mahb" name="mahb" class="form-control" value="{{old('mahb')}}" placeholder="Mã học bổng">
+                <label class="control-label">Mã học bổng
                 @if ($errors->has('mahb'))
-                        <span class="help-block">
-                          <strong style="color: red">{{ $errors->first('mahb') }}</strong>
-                        </span>
-                @endif
+                |
+                  {{( $errors->first('mahb') )}}
+                  @endif
+                  </label>
+
+                <input type="text" id="mahb" name="mahb" class="form-control" value="{{old('mahb')}}" placeholder="Mã học bổng">
+                
             </div>
             
 
             <div class="form-group col-md-4{{ $errors->has('tenhb') ? ' has-error' : '' }}">
-                <label class="control-label">Tên học bổng</label>
-                    <input type="text" id="tenhb" name="tenhb" class="form-control" value="{{old('tenhb')}}" placeholder="Tên học bổng">
+                <label class="control-label">Tên học bổng
+                </label>
+                <input type="text" id="tenhb" name="tenhb" class="form-control" value="{{old('tenhb')}}" placeholder="Tên học bổng">
             </div>
-             <div class="form-group col-md-4{{ $errors->has('tenhb') ? ' has-error' : '' }}">
-                <label class="control-label">Tên đơn vị tài trợ</label>
+             <div class="form-group col-md-4{{ $errors->has('tendvtt') ? ' has-error' : '' }}">
+                <label class="control-label">Tên đơn vị tài trợ
+                </label>
                     <input type="text" id="tendvtt" name="tendvtt" class="form-control" value="{{old('tendvtt')}}" placeholder="Tên đơn vị tài trợ">
             </div>
             <div class="form-group col-md-4{{$errors->has('tendvtt')? ' has-error' : ''}}">
@@ -52,26 +56,24 @@
                 <option value="">--- Học kỳ, năm học ---</option>
                 
                   @foreach($hockynamhoc as $hknh)
-                    <option value="{{$hknh->id}}" {{\Request::get('hknh')==$hknh->id ? "selected='selected'" : ""}}>{{$hknh->tenhockynamhoc}}</option>
+                    <option value="{{$hknh->id}}" {{$hknh->id == old('idhockynamhoc') ? 'selected="true"' : ''}}>{{$hknh->tenhockynamhoc}}</option>
                   @endforeach
                
               </select>
                 <span class="help-block"> <strong>{{ $errors->first('idhockynamhoc') }}</strong> </span>
             </div>
 
-            <div class="form-group col-md-4{{$errors->has('thoigianBDDK')? ' has-error' : ''}}">
+            <div class="form-group col-md-4 {{$errors->has('gthb')? ' has-error' : ''}}">
                 <label class="control-label">Giá trị học bổng</label>
                     <input type="number" id="gthb" name="gthb"  class="form-control" value="{{old('gthb')}}" placeholder="Giá trị học bổng">
                 <!-- <input type="date" name="thoigianBDDK" id="thoigianBDDK" class="form-control" value="{{old('thoigianBDDK')}}" autofocus> -->
-                <span class="help-block"> <strong>{{ $errors->first('thoigianBDDK') }}</strong> </span>
+                <span class="help-block"> <strong>{{ $errors->first('gthb') }}</strong> </span>
 
             </div>
-            <div class="form-group col-md-4{{$errors->has('thoigianKTDK')? ' has-error' : ''}}">
+            <div class="form-group col-md-4{{$errors->has('soluong')? ' has-error' : ''}}">
                 <label class="control-label">Số lượng</label>
                     <input type="number" id="soluong" name="soluong" class="form-control" value="{{old('soluong')}}" placeholder="Số lượng">
-                <!-- <input type="date" name="thoigianKTDK" id="thoigianKTDK" class="form-control" value="{{old('thoigianKTDK')}}" autofocus> -->
-                <span class="help-block"> <strong>{{ $errors->first('thoigianKTDK') }}</strong> </span>
-
+                    <span class="help-block"> <strong>{{ $errors->first('soluong') }}</strong> </span>
             </div>
             
             
@@ -81,7 +83,7 @@
                     <h4 class="text-center">Khoa</h4>
                   <div class="well" style="height: 150px; overflow: auto;">
                     
-                      <ul class="list-group checked-list-box {{ $errors->has('khoa[]') ? ' has-error' : '' }}">
+                      <ul class="list-group checked-list-box {{ $errors->has('khoa') ? ' has-error' : '' }}">
                          <li class="list-group-item"> <input type="checkbox" id="select_all" class="flat"> <label for="">Toàn trường  </label> </li>
                            @if(isset($ds_khoa))
                               @foreach($ds_khoa as $data)
@@ -92,11 +94,11 @@
                        
                   </div>
             </div>
-            <div class="form-group col-md-6{{$errors->has('selected_rating')? ' has-error' : ''}}">
+            <div class="form-group col-md-6{{$errors->has('gtmoihocbong')? ' has-error' : ''}}">
                <label class="control-label">Giá trị mỗi học bổng</label>
                     <input type="number" id="gtmoihocbong" name="gtmoihocbong" class="form-control" value="{{old('gtmoihocbong')}}" placeholder="Giá trị mỗi học bổng">
                 <!-- <input type="date" name="thoigianKTDK" id="thoigianKTDK" class="form-control" value="{{old('thoigianKTDK')}}" autofocus> -->
-                <span class="help-block"> <strong>{{ $errors->first('thoigianKTDK') }}</strong> </span>
+                <span class="help-block"> <strong>{{ $errors->first('gtmoihocbong') }}</strong> </span>
             </div>
 
             <div class="x_title">

@@ -15,7 +15,7 @@
   <div class="row">
     <div class="x_panel">
     <div class="pull-right">
-          <a href="{{route('covanhoctap.download.excel')}}" class="btn btn-success student_import">
+          <a href="{{route('covanhoctap.download.excel',$getHKNH->id)}}" class="btn btn-success student_import">
             <strong><i class="fa fa-download"></i>TẢI THỐNG KÊ</strong>
           </a>
         </div>
@@ -64,10 +64,10 @@
  
       </div>
    
-      <!-- <form>
+      <form>
       <div class="x_content">
         <div class="row col-12 text-center">
-          <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 text-center">
+          <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-3 col-lg-offset-3 text-center">
             
             
             
@@ -95,7 +95,7 @@
          
         </div>
       </div>
-      </form> -->
+      </form>
       <div class="x_content">
         <table id="tbl_sinhvien" class="table table-striped table-bordered">
           <thead>

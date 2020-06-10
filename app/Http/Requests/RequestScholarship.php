@@ -29,8 +29,11 @@ class RequestScholarship extends FormRequest
             'tendvtt'=>'required',
             'soluong'=>'required',
             'idhockynamhoc'=>'required',
-            'gthb'=>'required',
-            
+            'gthb'=>'required|numeric|min:0|not_in:0',
+
+            'soluong'=>'required|numeric|min:0|not_in:0',
+            'gtmoihocbong'=>'required|numeric|min:0|not_in:0',
+
         ];
     }
     public function messages(){
@@ -40,7 +43,17 @@ class RequestScholarship extends FormRequest
             'tenhb.required'=>'Vui lòng tên học bổng',
             'tendvtt.required'=>'Vui lòng điền đơn vị tài trợ',
             'soluong.required'=>'Vui lòng nhập số lượng',
-            'idhockynamhoc.required'=>'Vui lòng nhập số lượng',
+            'gthb.required'=>'Vui lòng nhập giá trị học bổng',
+            'gthb.not_in'=>'Giá trị học bổng phải lớn hơn 0',
+            'gthb.min'=>'Giá trị học bổng phải lớn hơn 0',
+            'soluong.required'=>'Vui lòng nhập số lượng',
+            'soluong.not_in'=>'Số lượng phải lớn hơn 0',
+            'soluong.min'=>'Số lượng phải lớn hơn 0',
+            'idhockynamhoc.required'=>'Vui lòng chọn học kỳ, năm học',
+            
+            'gtmoihocbong.required'=>'Vui lòng nhập giá trị mỗi học bổng',
+            'gtmoihocbong.not_in'=>'Giá trị mỗi học bổng phải lớn hơn 0',
+            'gtmoihocbong.min'=>'Giá trị mỗi học bổng phải lớn hơn 0',
 
             
         ];

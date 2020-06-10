@@ -22,7 +22,7 @@ class GiaoVuKhoaController extends Controller
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $Request)
     {
         $idGVK=Auth::user()->cbgvsv_id;
       $dsLop = GiaoVuKhoa::where('cbgv_id', '=', $idGVK)
@@ -36,7 +36,7 @@ class GiaoVuKhoaController extends Controller
             -> orderBy('lop.tenlop', 'asc')
             -> get();
       $idKhoa=GiaoVuKhoa::where('cbgv_id',$idGVK)->where('trangthai_id',1)->first();
-
+      $ds_hknh=HocKyNamHoc::all();
       $ThongBao=ThongBaoHocBong::join('hocbong', 'hocbong.id', '=', 'hocbong_thongbao.id_hocbong')
       ->join('hocky_namhoc','hocky_namhoc.id','hocbong.idhockynamhoc')
       ->join('hocbong_phamvi', 'hocbong_phamvi.id_hocbong', '=', 'hocbong.id')
@@ -46,27 +46,33 @@ class GiaoVuKhoaController extends Controller
        ->where('khoa.id','=',$idKhoa->khoa_id)
        ->orderBy('hocbong_thongbao.id','dsc')
        ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->get();
-      
-      
-      return view('hocbong::giaovukhoa.index',compact('dsLop','ThongBao'));
+       $getHKNH='';
+       if($Request->hknh){
+        $getHKNH=HocKyNamHoc::where('id',$Request->hknh)->first();
+      }
+      else {
+         $getHKNH=HocKyNamHoc::where('idtrangthaihocky',2)->first();
+      }
+      return view('hocbong::giaovukhoa.index',compact('dsLop','ThongBao','ds_hknh','getHKNH'));
     }
 
     
 
-    public function giaovukhoa_hocbong_sinhvien(Request $Request,$id){
+    public function giaovukhoa_hocbong_sinhvien($id,$idhk,Request $Request){
       $dsSinhVien = SinhVien::where('lop_id', '=',$id)
       ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
       ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
-      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc');
-      $getHKNH='';
-      if($Request->hknh){
-        $dsSinhVien->where('idhockynamhoc',$Request->hknh);
-        $getHKNH=HocKyNamHoc::where('id',$Request->hknh)->first();
-      }
-      else {
-        $dsSinhVien->where('idtrangthaihocky',2);
-         $getHKNH=HocKyNamHoc::where('idtrangthaihocky',2)->first();
-      }
+      ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+      ->where('idhockynamhoc',$idhk);
+      // $getHKNH='';
+      // if($Request->hknh){
+      //   $dsSinhVien->where('idhockynamhoc',$Request->hknh);
+      //   $getHKNH=HocKyNamHoc::where('id',$Request->hknh)->first();
+      // }
+      // else {
+      //   $dsSinhVien->where('idtrangthaihocky',2);
+      //    $getHKNH=HocKyNamHoc::where('idtrangthaihocky',2)->first();
+      // }
       $dsSinhVien=$dsSinhVien->orderBy('ten','asc')->select('*','sinhvien.id as idsv')->groupBy('idsv')->get();
 
       $ds_hknh=HocKyNamHoc::all();
@@ -115,7 +121,7 @@ class GiaoVuKhoaController extends Controller
       $path=config('app.url')."/diem-ren-luyen/images/upload/files/".$vanban->url;
       return redirect($path);
     }
-    public function giaovukhoa_download_excel(){
+    public function giaovukhoa_download_excel($idhk){
       $idGVK=Auth::user()->cbgvsv_id;
       $dsLop = GiaoVuKhoa::where('cbgv_id', '=', $idGVK)
             -> where('trangthai_id', '=', 1)
@@ -126,18 +132,20 @@ class GiaoVuKhoaController extends Controller
             -> where('khoahoc.namketthuc', '>=', date('Y'))
             -> select('*','lop.id as idlop')
             -> get();
-        
-         Excel::create('Thống kê học bổng năm học ', function($excel) use($dsLop) {
+        $getHKNH = HocKyNamHoc::find($idhk);
+         Excel::create('Thống kê học bổng '.$getHKNH->tenhockynamhoc, function($excel) use($dsLop,$idhk) {
 
          	foreach ($dsLop as $key => $lop) 
          	{
 	          $excel->setTitle('Danh sách sinh viên nhận học bổng');
-	        	$excel->sheet($lop->tenlop,function($sheet) use($lop) {
+	        	$excel->sheet($lop->tenlop,function($sheet) use($lop,$idhk) {
 
 	         		$data= DB::table('lichsu_hocbong')
 	         		->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
 	         		->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
-	         		->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+               ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+               ->where('bangdiemhoctap.hockynamhoc_id',$idhk)
+              ->where('bangdiemrenluyen.hocky_namhoc_id',$idhk)
 	         		->join('lop','lop.id','=','sinhvien.lop_id')
 	         		->where('lop.id',$lop->idlop)
 	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')

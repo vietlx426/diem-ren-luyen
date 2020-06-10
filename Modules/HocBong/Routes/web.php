@@ -72,6 +72,7 @@ Route::middleware('quantrihethong')->prefix('admin')->group(function(){
 	Route::get('xuatexcel-toantruong-namhoc/{id}', 'ExportController@xuatExcel')->name('xuatexcel.namhoc');
 	Route::get('xuatexcel-toantruong-hocky/{id}', 'ExportController@xuatExcelByHocKy')->name('xuatexcel.hocky');
 	Route::get('xuatexcel-theokhoa-namhoc/{id}/{idnamhoc}', 'ExportController@xuatExcelByKhoaByNamhoc')->name('xuatexcel.theokhoa');
+	
 	Route::get('xuatexcel-theokhoa-hocky/{id}/{idhk}', 'ExportController@xuatExcelByKhoaByHocKy')->name('xuatexcel.theokhoa.hocky');
 
 	//
@@ -111,7 +112,7 @@ Route::middleware('covanhoctap')->prefix('covanhoctap')->group(function(){
 			Route::get('sinhvien-lichsu/{id}/','CoVanHocTapController@covanhoctap_hocbong_lichsu')->name('covanhoctap.hocbong.lichsu');
 			Route::get('/xem-thong-bao/{id}','CoVanHocTapController@covanhoctap_thongbao')->name('covanhoctap.thongbao');
 			Route::get('/download/{id}','CoVanHocTapController@covanhoctap_download')->name('covanhoctap.download');
-			Route::get('/download-excel','CoVanHocTapController@covanhoctap_download_excel')->name('covanhoctap.download.excel');
+			Route::get('/download-excel/{idhk}','CoVanHocTapController@covanhoctap_download_excel')->name('covanhoctap.download.excel');
 
 			
 		});
@@ -120,11 +121,11 @@ Route::middleware('covanhoctap')->prefix('covanhoctap')->group(function(){
 Route::middleware('giaovukhoa')->prefix('giaovukhoa')->group(function(){
 	Route::prefix('hocbong')->group(function(){
 			Route::get('','GiaoVuKhoaController@index')->name('giaovukhoa.hocbong');
-			Route::get('sinhvien-hocbong/{id}','GiaoVuKhoaController@giaovukhoa_hocbong_sinhvien')->name('giaovukhoa.hocbong.sinhvien');
+			Route::get('sinhvien-hocbong/{id}/{idhk}','GiaoVuKhoaController@giaovukhoa_hocbong_sinhvien')->name('giaovukhoa.hocbong.sinhvien');
 			Route::get('sinhvien-lichsu/{id}','GiaoVuKhoaController@giaovukhoa_hocbong_lichsu')->name('giaovukhoa.hocbong.lichsu');
 			Route::get('/xem-thong-bao/{id}','GiaoVuKhoaController@giaovukhoa_thongbao')->name('giaovukhoa.thongbao');
 			Route::get('/download/{id}','GiaoVuKhoaController@giaovukhoa_download')->name('giaovukhoa.download');
-			Route::get('/download-excel','GiaoVuKhoaController@giaovukhoa_download_excel')->name('giaovukhoa.download.excel');
+			Route::get('/download-excel/{idhk}','GiaoVuKhoaController@giaovukhoa_download_excel')->name('giaovukhoa.download.excel');
 		});
 });
 

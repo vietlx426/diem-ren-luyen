@@ -25,7 +25,8 @@
         ?>
           <a href="{{route('xuatexcel.theokhoa',[$tenkhoa->id,$getNamHoc->id])}}" class="btn btn-success">
             <strong><i class="fa fa-download"></i> EXPORT</strong>
-          </a>                                                           
+          </a>   
+                                                                  
         <?php                       
         }
         else{

@@ -25,10 +25,7 @@ class ThongBaoRequest extends FormRequest
             'tieude.unique'=>'Tên thông báo đã tồn tại',
             'tieude.required'=>'Nhập tên tiêu đề',
             'noidung.required'=>'Nhập nội dung thông báo',
-            'hocbong.required'=>'Chọn học bổng',
-            
-
-            
+            'hocbong.required'=>'Chọn học bổng',      
         ];
     }
 

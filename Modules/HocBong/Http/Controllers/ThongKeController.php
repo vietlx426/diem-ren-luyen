@@ -46,8 +46,6 @@ class ThongKeController extends Controller
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
         ->where('khoa.id','=',$id)
-        ->groupBy('sinhvien.id')
-         ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
 
 
@@ -102,7 +100,6 @@ class ThongKeController extends Controller
         ->join('nganh','nganh.id','=','lop.nganh_id')
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
-        ->groupBy('sinhvien.id')
         ->where('khoa.id','=',$id)
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();

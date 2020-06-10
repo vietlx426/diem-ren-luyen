@@ -11,12 +11,12 @@
   <div class="row">
     <div class="x_panel">
     <div class="pull-right">
-          <a href="{{route('giaovukhoa.download.excel')}}" class="btn btn-success student_import">
+          <a href="{{route('giaovukhoa.download.excel',$getHKNH->id)}}" class="btn btn-success student_import">
             <strong><i class="fa fa-download"></i>TẢI THỐNG KÊ</strong>
           </a>
         </div>
       <div class="x_title">
-          <h2> <i class="fa fa-graduation-cap"></i> DANH SÁCH LỚP - SINH VIÊN - HỌC BỔNG</h2>
+          <h2> <i class="fa fa-graduation-cap"></i> DANH SÁCH LỚP - SINH VIÊN - HỌC BỔNG {{isset($getHKNH) ? $getHKNH->tenhockynamhoc : ''}}</h2>
           <div class="clearfix"></div>
       </div>
       
@@ -50,7 +50,38 @@
       </div>
         <br>
         <hr>
-
+        <form>
+      <div class="x_content">
+        <div class="row col-12 text-center">
+          <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-3 col-lg-offset-3 text-center">
+            
+            
+            
+            
+            <div >
+              <h4 class="text-center">HỌC KỲ, NĂM HỌC</h4>
+              <div class="well" style="max-height: 150px; overflow: auto;">
+                  <label class="control-label">Học kỳ, năm học</label>
+              <select name="hknh" id="hknh" class="form-control">
+                <option value="">--- Tất cả ---</option>
+                
+                  
+                   @foreach($ds_hknh as $hknh)
+                      <option value="{{$hknh->id}}" {{\Request::get('hknh')==$hknh->id ? "selected='selected'" : ""}}>{{$hknh->tenhockynamhoc}}</option>
+                    @endforeach
+              </select>
+              </div>
+          </div>
+            
+          
+            <div id="divSearch" class="form-group">
+              <button class="btn btn-primary btn-search-user-group"><i class="fa fa-search"></i> Tìm </button>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+      </form>
         <br>  
       <div class="x_content">
         <div class="row">
@@ -58,7 +89,7 @@
             @foreach($dsLop as $lop)
               <div class="col-xm-6 col-sm-4 col-md-3 col-lg-2 col-xl-1" title="Click để đánh giá điểm rèn luyện cho lớp {{$lop->tenlop}}">
                 <div class="row dash-box">
-                  <a href="{{route('giaovukhoa.hocbong.sinhvien', $lop->id)}}">
+                  <a href="{{route('giaovukhoa.hocbong.sinhvien', [$lop->id,$getHKNH->id])}}">
                     <div class="row img">
                       <img src="{{URL::asset('images/icons/checklist.png')}}" alt="" style="width: 70%;">
                     </div>

@@ -17,10 +17,12 @@
             @include('layouts.gentelella-master.blocks.flash-messages')
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 ">
-                    <div class="form-group">
+                    <div class="form-group {{$errors->has('tieude')? ' has-error' : ''}}">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tieude">Tiêu đề<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" name="tieude" id="tieude" class="form-control" value="{{old('tieude')}}" placeholder="Tiêu đề">
+                            <input type="text" name="tieude" id="tieude" class="form-control" value="{{old('tieude')}}" placeholder="Tiêu đề" required=""
+                            oninvalid="this.setCustomValidity('Vui lòng nhập tiêu đề')"
+ oninput="setCustomValidity('')">
                             @if ($errors->has('tieude'))
                               <span class="help-block">
                                 <strong style="color: red">{{ $errors->first('tieude') }}</strong>
@@ -31,10 +33,12 @@
                     </div>
                 </div>
                  <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                    <div class="form-group">
+                    <div class="form-group {{$errors->has('hocbong')? ' has-error' : ''}}">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="tieude">Học bổng<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select name="hocbong" id="hocbong" class="form-control">
+                            <select name="hocbong" id="hocbong" class="form-control" required=""
+                            oninvalid="this.setCustomValidity('Vui lòng chọn thông báo')"
+ oninput="setCustomValidity('')">
                                 <option value="">--- Chọn học bổng ---</option>
                              @foreach($dsHocBong as $data)
                                 <option value="{{$data->idhb}}" {{$data->idhb == old('hocbong') ? 'selected="true"' : ''}}>{{$data->tenhb}}</option>
@@ -56,7 +60,9 @@
                             <div class="btn-group">
                                 <div class="input-group image-preview">
                                   
-                                    <input type="date" name="ngayhethan" id="ngayhethan" class="form-control" value="{{old('ngayhethan')}}">
+                                    <input type="date" name="ngayhethan" id="ngayhethan" class="form-control" value="{{old('ngayhethan')}}" required=""
+                            oninvalid="this.setCustomValidity('Vui lòng chọn ngày hết hạn nộp hồ sơ')"
+ oninput="setCustomValidity('')">
                                     
                                 </div>
                             </div>
@@ -67,10 +73,10 @@
               </div>
                 
                 <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10 ">
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="motabotieuchi">Nội dung thông báo<span class="required">*</span></label>
+                    <div class="form-group{{$errors->has('noidung')? ' has-error' : ''}}">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="noidung">Nội dung thông báo<span class="required">*</span></label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea name="noidung" id="noidung" class="ckeditor"  rows="5" class="form-control" placeholder="Nội dung thông báo">{{ old('noidung') }}</textarea>
+                            <textarea name="noidung" id="noidung" class="ckeditor"  rows="5" class="form-control" placeholder="Nội dung thông báo" required>{{ old('noidung') }}</textarea>
                             @if ($errors->has('noidung'))
                               <span class="help-block">
                                 <strong style="color: red">{{ $errors->first('noidung') }}</strong>

@@ -75,6 +75,7 @@ class HocBongController extends Controller
        }
         if($Request->tenhb) $scholar->where('tenhb','like','%'.$Request->tenhb.'%')->orWhere('mahb', 'LIKE', '%'.$Request->tenhb.'%') ;
        if($Request->khoa){
+           
             $scholar->where('id_khoa',$Request->khoa);
         }
         
@@ -86,7 +87,6 @@ class HocBongController extends Controller
 
         $scholar=$scholar->select('hocbong.*','hocbong.id as idhb','hocky_namhoc.*')->orderBy('hocky_namhoc.id','desc')->get();
         $getHKNH=HocKyNamHoc::where('id',$Request->hknh)->first();
-        
         $ds_khoa=$this->getKhoa();
 
         
@@ -300,7 +300,7 @@ class HocBongController extends Controller
         $ds_khoa=$this->getKhoa();
         return view('hocbong::admin.create',compact('ds_khoa','hockynamhoc'));
     }
-    public function store(RequestScholarship $RequestScholarship){
+    public function store(RequestScholarship $RequestScholarship, ThongBaoRequest $ThongBaoRequest){
        
 
         if($RequestScholarship->khoa == null)
@@ -331,15 +331,15 @@ class HocBongController extends Controller
 
             
             }
-            if($RequestScholarship->tieude && $RequestScholarship->noidung)
+            if($ThongBaoRequest->tieude && $ThongBaoRequest->noidung)
             {
                 $thongbao = new ThongBaoHocBong;
-                $thongbao->tieude=$RequestScholarship->tieude;
+                $thongbao->tieude=$ThongBaoRequest->tieude;
                 
-                $thongbao->noidung=$RequestScholarship->noidung;
+                $thongbao->noidung=$ThongBaoRequest->noidung;
                 $thongbao->id_hocbong=$scholar->id;
                 $thongbao->author=Auth::user()->id;
-                $thongbao->slug=str_slug($RequestScholarship->tieude);
+                $thongbao->slug=str_slug($ThongBaoRequest->tieude);
                 $thongbao->status=1;
                 $thongbao->created_at=Carbon::now();
 

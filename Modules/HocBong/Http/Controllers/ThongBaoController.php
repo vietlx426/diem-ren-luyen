@@ -69,14 +69,13 @@ class ThongBaoController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(ThongBaoRequest $request)
+    public function store(ThongBaoRequest $ThongBaoRequest)
     {
         
 
         try {
         $thongbao = new ThongBaoHocBong;
         $thongbao->tieude=$request->tieude;
-        
         $thongbao->noidung=$request->noidung;
         $thongbao->id_hocbong=$request->hocbong;
         $thongbao->ngay_het_han=$request->ngayhethan;

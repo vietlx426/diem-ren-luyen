@@ -132,7 +132,7 @@
         <?php 
         }
         ?>
-
+        
           
             
           
@@ -242,10 +242,10 @@
                 
                 <td>
                   <a href="{{route('thongke.theo.hocbong.namcu',$data->idhb)}}"><i style="font-size: 25px; color: green" class="fa fa-search"></i></a>
-
-                  
                   <a href="{{route('hocbong.edit',$data->idhb)}}"><i style="font-size: 25px; color: orange" class="fa fa-pencil-square-o"></i></a>
+                  @if(count($sl_hbdatrao->where("id_hocbong", $data->idhb)) === 0)
                   <a href="{{route('hocbong.delete',$data->idhb)}}"><i style="font-size: 25px; color: red" class="fa fa-trash"></i></a>
+                  @endif
                 </td>
               </tr>
                                 @endforeach
