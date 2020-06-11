@@ -21,8 +21,12 @@
       </div>
       
       <div class="x_content" >
-       <table id="tbl_sinhvien" class="table table-striped table-bordered" >
-        <p><strong>Thông báo: </strong></p>
+       <table id="tbl_thongbao" class="table table-striped table-bordered" >
+       <thead>
+                  <tr class="filters">
+                      <th >Danh sách thông báo</th>                                   
+                   </tr>
+                </thead> 
 
           <tbody >
            @isset($ThongBao)
@@ -127,7 +131,7 @@
     <script src="{{URL::asset('gentelella-master/vendors/pdfmake/build/vfs_fonts.js')}}"></script>
     
     <script type="text/javascript">
-      $('#tbl_hocbong').dataTable();
+      $('#tbl_thongbao').dataTable();
     </script>
 
 @endsection

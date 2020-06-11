@@ -21,14 +21,29 @@
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>
         </ul>
-        <div class="clearfix"></div>
+        <div class="clearfix">
+        </div>
       </div>
 
       <div class="x_content">
         <div class="row">
-          <div class="col-12 col-md-12">
+          <div class="col-12 col-md-12">  
             <!-- Block error message -->
             @include('layout.block.message_flash')
+            <ul class="list-inline">
+              <li class="list-inline-item"><a class="social-icon text-xs-center"  href="?status=1">
+              <span class="label label-primary" style="font-size: 12px">Đơn đang chờ xử lý</span>
+              
+              </a></li>
+              <li class="list-inline-item"><a class="social-icon text-xs-center"  href="?status=2">
+              <span class="label label-success" style="font-size: 12px">Đã xử lý</span>
+              
+              </a></li>
+              <li class="list-inline-item"><a class="social-icon text-xs-center"  href="?status=3">
+              <span class="label label-danger" style="font-size: 12px">Đơn đã từ chối</span>
+              
+              </a></li>
+            </ul>
           </div>
         </div>
         <div class="row">

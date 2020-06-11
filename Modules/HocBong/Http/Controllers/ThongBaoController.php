@@ -69,7 +69,7 @@ class ThongBaoController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(ThongBaoRequest $ThongBaoRequest)
+    public function store(ThongBaoRequest $request)
     {
         
 
@@ -207,11 +207,29 @@ class ThongBaoController extends Controller
         DB::table('hocbong_thongbao_vanban')->where('id', '=', $id)->delete();
         return redirect()->back();
     }
-    public function getDSHoSo(){
-        $dsHoSo=HoSoHocBong::all();
+    public function getDSHoSo(Request $request){
+        $dsHoSo=HoSoHocBong::orderBy('id','desc');
+        if($request->status)
+        {
+            $status = $request->status;
+            switch($status)
+            {
+                
+                case '1':
+                    $dsHoSo->where('status',0);
+                    break;
+                case '2':
+                    $dsHoSo->where('status',1);
+                    break;
+                case '3':
+                    $dsHoSo->where('status',2);
+                    break;
+
+            }
+        }
+        $dsHoSo = $dsHoSo->get();
         $fileHoSo=FileHoSoHocBong::all();
         $dshocky = HocKyNamHoc::all();
-
         $viewData=[
             'dsHoSo' => $dsHoSo,
             'fileHoSo' => $fileHoSo,

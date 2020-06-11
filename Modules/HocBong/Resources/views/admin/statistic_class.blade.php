@@ -168,7 +168,6 @@
                   @if($hocbong->id_sinhvien === $data->id_sinhvien)
                   {{$hocbong->HocBong->tenhb}}<br>
                   @endif
-                  
                   @endforeach
                   </td>
                  

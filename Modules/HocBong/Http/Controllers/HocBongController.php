@@ -133,10 +133,13 @@ class HocBongController extends Controller
             ->groupBy('sinhvien.id')
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
             ->get();
-            $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+            $sum = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+            ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+            ->join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
             ->join('lop','lop.id','=','sinhvien.lop_id')
             ->join('nganh','nganh.id','=','lop.nganh_id')
             ->join('bomon','bomon.id','=','nganh.idbomon')
+            ->where('hocky_namhoc.id','=',$Request->hknh)
             ->select('*','bomon.idkhoa as idk')
             ->get();
             }
@@ -168,6 +171,9 @@ class HocBongController extends Controller
                  ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
                 ->get();
                 $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+                ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+                ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+               ->where('hocky_namhoc.idnamhoc','=',$Request->namhoc)
                 ->join('lop','lop.id','=','sinhvien.lop_id')
                 ->join('nganh','nganh.id','=','lop.nganh_id')
                 ->join('bomon','bomon.id','=','nganh.idbomon')
@@ -202,6 +208,9 @@ class HocBongController extends Controller
              ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
             ->get();
             $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+            ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+            ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+           ->where('hocky_namhoc.id','=',$Request->hknh)
             ->join('lop','lop.id','=','sinhvien.lop_id')
             ->join('nganh','nganh.id','=','lop.nganh_id')
             ->join('bomon','bomon.id','=','nganh.idbomon')
@@ -237,6 +246,9 @@ class HocBongController extends Controller
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
         $sum = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)
         ->join('lop','lop.id','=','sinhvien.lop_id')
         ->join('nganh','nganh.id','=','lop.nganh_id')
         ->join('bomon','bomon.id','=','nganh.idbomon')
@@ -679,6 +691,7 @@ class HocBongController extends Controller
    }
    public function dashboard()
    {
+        
         $HocKyNamHoc_HienTai = HocKyNamHoc::where('idtrangthaihocky', '=', 2)->first();
         
 
@@ -687,14 +700,44 @@ class HocBongController extends Controller
          $sl_HBdatrao=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)->get();
-        
-        $thong_ke_charts_column1 = HocKyNamHoc::join('hocbong','hocbong.idhockynamhoc','=','hocky_namhoc.id')
-        ->join('lichsu_hocbong','lichsu_hocbong.id_hocbong','=','hocbong.id')
+        $soSVnhanHB=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->get();
+        $namhoc_chart2 = $HocKyNamHoc_HienTai->idnamhoc;
+        $thong_ke_charts_column1 = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
         ->groupBy('lichsu_hocbong.id_sinhvien')
         ->select('*','hocky_namhoc.idnamhoc as idnh')
         ->get();
-        $namhoc_chart2 = $HocKyNamHoc_HienTai->idnamhoc;
-    
+        
+        $year1 = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$HocKyNamHoc_HienTai->idnamhoc)
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->get();
+        $motnamtruoc = NamHoc::orderBy('created_at', 'desc')->skip(1)->first();
+        $year2 = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$motnamtruoc->id)
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->get();
+        $hainamtruoc = NamHoc::orderBy('id', 'desc')->skip(2)->first();
+        $year3 = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$hainamtruoc->id)
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->get();
+        $banamtruoc =  NamHoc::orderBy('id', 'desc')->skip(3)->first();
+        $year4 = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc','=',$banamtruoc->id)
+        ->groupBy('lichsu_hocbong.id_sinhvien')
+        ->get();
+        $SoHBDaTrao = LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+        ->where('hocky_namhoc.idnamhoc',$HocKyNamHoc_HienTai->idnamhoc)->count('giatri');
 
          $thong_ke_charts_column2=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
          ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
@@ -721,6 +764,17 @@ class HocBongController extends Controller
             'namhoc_chart2'=>$namhoc_chart2,
             'thong_ke_charts_column1'=>$thong_ke_charts_column1,
             'thong_ke_charts_column2'=>$thong_ke_charts_column2,
+            'SoHBDaTrao'=>$SoHBDaTrao,
+            'soSVnhanHB'=>$soSVnhanHB,
+            'motnamtruoc'=>$motnamtruoc,
+            'hainamtruoc'=>$hainamtruoc,
+            'banamtruoc'=>$banamtruoc ,
+            'year1'=>$year1,
+            'year2'=>$year2,
+            'year3'=>$year3,
+            'year4'=>$year4,
+
+
 
          ];
         return view('hocbong::admin.dashboard',$viewData);

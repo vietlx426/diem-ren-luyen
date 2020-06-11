@@ -214,12 +214,16 @@ class ThongKeController extends Controller
         $dssvByHocKy=SinhVien::where('lop_id',$id)
         ->join('lichsu_hocbong','lichsu_hocbong.id_sinhvien','=','sinhvien.id')
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->where('hocbong.idhockynamhoc',$idhknh)
         ->join('bangdiemhoctap','bangdiemhoctap.sinhvien_id','=','sinhvien.id')
         ->join('bangdiemrenluyen','bangdiemrenluyen.sinhvien_id','=','sinhvien.id')
+        ->where('bangdiemhoctap.hockynamhoc_id',$idhknh)->where('bangdiemrenluyen.hocky_namhoc_id',$idhknh)
         ->select('*','bangdiemhoctap.diem as diemhoctap','bangdiemrenluyen.diem as drl')
-        ->groupBy('sinhvien.id')
+        ->groupBy('lichsu_hocbong.id_sinhvien')
         ->get();
-        $dshb=LichSuHocBong::all();
+        
+        $dshb=LichSuHocBong::join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->where('hocbong.idhockynamhoc','=',$idhknh)->get();
         $sotien_theolop = LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
         ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
         ->where('hocbong.idhockynamhoc','=',$idhknh)

@@ -55,7 +55,7 @@
                 <img src="{{URL::asset('images/icons/teacher.png')}}" alt="" style="width: 50%;">
               </div>
               <div class="row title">
-                SỐ SV ĐÃ NHẬN HỌC BỔNG: {{(isset($sl_HBdatrao) ? $sl_HBdatrao->count("id_sinhvien") : 0)}}
+                SỐ SUẤT HỌC BỔNG ĐÃ TRAO: {{(isset($SoHBDaTrao) ? $SoHBDaTrao : 0)}}
               </div>
             </div>
           </div>
@@ -202,10 +202,10 @@
    {
     var data = google.visualization.arrayToDataTable([
         ["", "Số lượng sinh viên", { role: "style" } ],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-3)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-3))}}, "#b87333"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-2))}}, "#b87333"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2-1)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2-1))}}, "#b87333"],
-        ["{{ \App\NamHoc::where('id',$namhoc_chart2)->first()->tennamhoc }}", {{count($thong_ke_charts_column1->where("idnh", $namhoc_chart2))}}, "#b87333"],
+        ["{{$banamtruoc->tennamhoc}}", {{count($year4)}}, "#b87333"],
+        ["{{$hainamtruoc->tennamhoc}}", {{count($year3)}}, "#b87333"],
+        ["{{$motnamtruoc->tennamhoc}}", {{count($year2)}}, "#b87333"],
+        ["{{ $HocKyNamHoc_HienTai->namhoc->tennamhoc}}", {{count($year1)}}, "#b87333"],
         
       ]);
     var options = {

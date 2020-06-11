@@ -15,6 +15,11 @@
 @section('content')
 <div class="row">
       <div class="x_panel">
+      <div class="pull-right">
+          <a href="{{route('sinhvien.ketqua.all')}}" class="btn btn-info">
+            <strong><i class="fa fa-info"></i> KẾT QUẢ HỌC BỔNG TOÀN KHÓA</strong>
+          </a>
+        </div>
         <div class="x_content">
           <div class="row text-center">
             <h4>DANH SÁCH THÔNG BÁO & HỒ SƠ XIN CẤP HỌC BỔNG</h4>

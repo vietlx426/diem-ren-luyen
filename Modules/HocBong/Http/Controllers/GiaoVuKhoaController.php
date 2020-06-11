@@ -44,7 +44,7 @@ class GiaoVuKhoaController extends Controller
       ->where('hocky_namhoc.idtrangthaihocky',2)
       ->where('hocbong_thongbao.status','=',1)
        ->where('khoa.id','=',$idKhoa->khoa_id)
-       ->orderBy('hocbong_thongbao.id','dsc')
+       ->orderBy('hocbong_thongbao.id','desc')
        ->select('*','hocbong_thongbao.id as idthongbao','hocbong_thongbao.created_at as ngaytao')->get();
        $getHKNH='';
        if($Request->hknh){
