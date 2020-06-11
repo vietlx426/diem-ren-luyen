@@ -148,20 +148,25 @@ class GiaoVuKhoaController extends Controller
               ->where('bangdiemrenluyen.hocky_namhoc_id',$idhk)
 	         		->join('lop','lop.id','=','sinhvien.lop_id')
 	         		->where('lop.id',$lop->idlop)
-	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')
+	         		->select('*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl', DB::raw('SUM(giatri) AS sum'))
 	         		->groupBy('sinhvien.id')
 	         		->get()
-	         		->toArray();
-	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Số tiền');
+               ->toArray();
+	         		$data_array[] = array('MSSV', 'Họ tên SV','Lớp','Điểm học tập','Điểm rèn luyện','Học bổng','Số tiền');
 			    	foreach ($data as  $dt) 
 			    	{
+              $dshb = LichSuHocBong::where('id_sinhvien',$dt->id_sinhvien)
+           ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+           ->where('hocbong.idhockynamhoc',$idhk)
+           ->pluck('tenhb')->toArray();
 			    		$data_array[] = array(
 				       'MSSV'  		  => $dt->mssv,
 				       'Họ tên sinh viên'    => $dt->hochulot.' '.$dt->ten,
 				       'Lớp'    	  => $dt->tenlop,
 				       'Điểm học tập'    	  => $dt->diemht,
-				       'Điểm rèn luyện'    	  => $dt->drl,
-				       'Số tiền'      => number_format($dt->giatri,0,',','.'),
+               'Điểm rèn luyện'    	  => $dt->drl,
+               'Học bổng'    	  => implode('. ',$dshb),
+				       'Số tiền'      => number_format($dt->sum,0,',','.'),
 				       
 			      	);
 			    	}

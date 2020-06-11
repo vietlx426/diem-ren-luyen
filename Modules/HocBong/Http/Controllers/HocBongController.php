@@ -85,7 +85,10 @@ class HocBongController extends Controller
 
 
 
-        $scholar=$scholar->select('hocbong.*','hocbong.id as idhb','hocky_namhoc.*')->orderBy('hocky_namhoc.id','desc')->get();
+        $scholar=$scholar->select('hocbong.*','hocbong.id as idhb','hocky_namhoc.*')
+        ->orderBy('hocky_namhoc.id','desc')
+        ->orderBy('hocbong.id','desc')
+        ->get();
         $getHKNH=HocKyNamHoc::where('id',$Request->hknh)->first();
         $ds_khoa=$this->getKhoa();
 

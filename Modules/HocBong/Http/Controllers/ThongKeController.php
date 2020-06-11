@@ -47,7 +47,17 @@ class ThongKeController extends Controller
         ->join('khoa','khoa.id','=','bomon.idkhoa')
         ->where('khoa.id','=',$id)
         ->get();
-
+        $soSVDaNhanHB=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+         ->where('hocky_namhoc.idnamhoc','=',$idnamhoc)
+        ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->join('nganh','nganh.id','=','lop.nganh_id')
+        ->join('bomon','bomon.id','=','nganh.idbomon')
+        ->join('khoa','khoa.id','=','bomon.idkhoa')
+        ->groupBy('sinhvien.id')
+        ->where('khoa.id','=',$id)
+        ->get();
 
      
 
@@ -79,6 +89,8 @@ class ThongKeController extends Controller
             'getNamHoc'=>$getNamHoc,
             'ds_lop'=>$ds_lop,
             'sl_SVlop'=>$sl_SVlop,
+            'soSVDaNhanHB'=>$soSVDaNhanHB,
+            
         ];
         return view('hocbong::admin.statistic_faculty',$viewData);
     }
@@ -100,6 +112,18 @@ class ThongKeController extends Controller
         ->join('nganh','nganh.id','=','lop.nganh_id')
         ->join('bomon','bomon.id','=','nganh.idbomon')
         ->join('khoa','khoa.id','=','bomon.idkhoa')
+        ->where('khoa.id','=',$id)
+         ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
+        ->get();
+        $soSVDaNhanHB=LichSuHocBong::join('sinhvien','sinhvien.id','=','lichsu_hocbong.id_sinhvien')
+        ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+        ->join('hocky_namhoc','hocky_namhoc.id','=','hocbong.idhockynamhoc')
+         ->where('hocky_namhoc.id','=',$idhknh)
+        ->join('lop','lop.id','=','sinhvien.lop_id')
+        ->join('nganh','nganh.id','=','lop.nganh_id')
+        ->join('bomon','bomon.id','=','nganh.idbomon')
+        ->join('khoa','khoa.id','=','bomon.idkhoa')
+        ->groupBy('sinhvien.id')
         ->where('khoa.id','=',$id)
          ->select('lichsu_hocbong.*','lop.*','nganh.*','bomon.*','khoa.*','khoa.id as idk')
         ->get();
@@ -130,6 +154,7 @@ class ThongKeController extends Controller
             'getHKNH'=>$getHKNH,
             'ds_lop'=>$ds_lop,
             'sl_SVlop'=>$sl_SVlop,
+            'soSVDaNhanHB'=>$soSVDaNhanHB,
         ];
         return view('hocbong::admin.statistic_faculty',$viewData);
     }

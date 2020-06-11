@@ -142,10 +142,11 @@ class TraoHocBongController extends Controller
         {
             $idhb=$request->inputidhb;
         $arrayMessage = array('result' => true, 'message' => "" );
-
+        $countSVtrao = count($request->inputidsv);
+        $sotien = array_sum($request->giatri);
         foreach ($request->inputidsv as $key => $check) {
                 
-                $resultMessage = self::validateTraoHB($check,$idhb);
+                $resultMessage = self::validateTraoHB($check,$idhb,$countSVtrao,$sotien);
 
                 if($resultMessage['result'] == false)
                 {
@@ -183,19 +184,31 @@ class TraoHocBongController extends Controller
 
 
     }
-    public function validateTraoHB($check,$idhb)
+    public function validateTraoHB($check,$idhb,$countSVtrao,$sotien)
     {
         $arrayMessage = array('result' => true, 'message' => "" );
-
-
-    
+        
+        //check sv đã nhận học bổng chưa
         $HocBongExist = LichSuHocBong::where('id_sinhvien', '=', $check)->where('id_hocbong','=',$idhb)->first();
         if(isset($HocBongExist))
         {
             $arrayMessage['result'] = false;
             $arrayMessage['message'] .= "Sinh viên ".$HocBongExist->infosv->hochulot." ".$HocBongExist->infosv->ten. " (".$HocBongExist->infosv->mssv.")"." đã nhận ".$HocBongExist->HocBong->tenhb." ở học kỳ này, vui lòng chọn lại!";
         }
-        
+        //check số lượng đã trao
+        $infoHB = HocBong::find($idhb);
+        $countSV = LichSuHocBong::where('id_hocbong',$idhb)->get();
+        $sotien_datrao = LichSuHocBong::where('id_hocbong',$idhb)->sum('giatri');
+        $soluong_conlai = ($infoHB->soluong) - (count($countSV));
+        $sotien_conlai = ($infoHB->gthb) - $sotien_datrao;
+        if($countSVtrao > $soluong_conlai){
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Số lượng học bổng còn lại không đủ (còn lại ".$soluong_conlai." )";
+        }
+        if($sotien > $sotien_conlai){
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Số tiền còn lại không đủ (còn lại ".number_format($sotien_conlai)."đ )";
+        }
         return $arrayMessage;
     }
 
@@ -207,7 +220,7 @@ class TraoHocBongController extends Controller
     {
        
         
-        $MAX_ROW = 100000;
+        $MAX_ROW = 10000;
 
         if($request->hasFile('input_file')){
             $path = $request->file('input_file')->getRealPath();
@@ -260,20 +273,22 @@ class TraoHocBongController extends Controller
     }
     public function storeDSSVHB($DSSV)
     {
+        
         try {
             $getIdSV = SinhVien::where('mssv', 'like',$DSSV['mssv'] )->first();
-
+            $arrayGiaTri=explode('. ', $DSSV['giatri']);
             $maHB=$DSSV['mahb'];
-     
+            $index = 0;
             $idHB_array = self::getIdHBByName($maHB);
             foreach ($idHB_array as $key => $idHB) {
                 $data = new LichSuHocBong;
-                $data->giatri=$DSSV['giatri'];
+                $data->giatri=$arrayGiaTri[$index];
                 $data->id_sinhvien=$getIdSV ? $getIdSV->id : "";
 
                 $data->id_hocbong = $idHB;
 
                 $data->save();
+                $index++;
             }
 
 
@@ -376,8 +391,12 @@ class TraoHocBongController extends Controller
             $arrayMessage['message'] .= "Sinh viên không tồn tại trên hệ thống; ";
         }
 
-
-        
+        $arrayGiaTri=explode('. ', $DSSV['giatri']);
+        $arrayMaHB = explode('. ', $DSSV['mahb']);
+        if(count($arrayGiaTri) !== count($arrayMaHB)){
+            $arrayMessage['result'] = false;
+            $arrayMessage['message'] .= "Thiếu mã học bổng hoặc giá trị học bổng; ";
+        }
         
 
         return $arrayMessage;
@@ -389,9 +408,10 @@ class TraoHocBongController extends Controller
         $arrayHB=explode('. ', $mahb);
         $check=HocBong::whereIn('mahb',$arrayHB)->get();
         $collection = collect($arrayHB);
+        dd($collection);
 
         if(count($check) === count($arrayHB))
-        {
+        {   
             $idHB_array = $collection->map(function ($item, $key){
                 $tmp=HocBong::where('mahb', '=',$item)
                 ->first();

@@ -136,8 +136,9 @@ class CoVanHocTapController extends Controller
            ->where('bangdiemhoctap.hockynamhoc_id',$getHKNH->id)
            ->where('bangdiemrenluyen.hocky_namhoc_id',$getHKNH->id)
            ->select('sinhvien.*','bangdiemhoctap.diem as diemht','bangdiemrenluyen.diem as drl')->first();
-           $dshb = LichSuHocBong::where('id_sinhvien',3)
+           $dshb = LichSuHocBong::where('id_sinhvien',$dt['id_sinhvien'])
            ->join('hocbong','hocbong.id','=','lichsu_hocbong.id_hocbong')
+           ->where('hocbong.idhockynamhoc',$getHKNH->id)
            ->pluck('tenhb')->toArray();
            $data_array[] = array(
             'MSSV'  		  => $info->mssv,

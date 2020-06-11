@@ -85,7 +85,7 @@
                 <img src="{{URL::asset('images/icons/class.png')}}" alt="" style="width: 50%;">
               </div>
               <div class="row title">
-             SỐ SV ĐÃ NHẬN HỌC BỔNG:   {{ count($sl_HBdatrao) }}
+             SỐ SV ĐÃ NHẬN HỌC BỔNG:   {{ count($soSVDaNhanHB) }}
               </div>
             </div>
           </div>
